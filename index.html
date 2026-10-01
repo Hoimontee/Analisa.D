@@ -1,0 +1,1111 @@
+<!--
+  ============================================================
+  EDITING GUIDE — read this before making changes
+  ============================================================
+  This is a plain HTML file: no build step, no compiler.
+  Edit it directly in cPanel File Manager's built-in editor,
+  or in any text editor, then re-upload/save.
+
+  SAFE TO EDIT YOURSELF:
+    - Any visible text (search for the words you see on the
+      site — headlines, paragraphs, card copy, stats, email).
+    - Colors: see the ":root { ... }" block near the top of
+      the <style> section below. Each --name: #hexcode; line
+      is a color used sitewide — change the hex value, it
+      updates everywhere that variable is used.
+
+  ASK CLAUDE BEFORE EDITING:
+    - Anything inside the final <script> block — this is the
+      code that generates the diffraction/PDF charts from
+      data, not hand-drawn artwork.
+    - Layout/structure changes (new sections, grids, pages).
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisa — Advanced Powder Diffraction &amp; PDF Analysis</title>
+<meta name="description" content="Expert powder diffraction, total scattering, Pair Distribution Function (PDF) analysis and structural modelling for complex materials.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* SITEWIDE COLORS — change any hex value below, it updates everywhere that variable is used */
+  :root{
+    --bg: #1A1B1D;
+    --bg-panel: #222325;
+    --bg-panel-2: #28292C;
+    --accent: #D2954A;
+    --blue: #7B9BB8;
+    --rose: #C17568;
+    --text: #F5F4F1;
+    --text-dim: #AEADA9;
+    --text-faint: #777673;
+    --line: rgba(245,244,241,0.10);
+    --line-strong: rgba(245,244,241,0.20);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --wrap: 1120px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap{ max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+
+  h1,h2,h3{ font-family: var(--font-display); font-weight: 500; margin: 0; color: var(--text); }
+
+  /* ---------- Top ticker ---------- */
+  .ticker{
+    border-bottom: 1px solid var(--line);
+    background: #141516;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    padding: 7px 0;
+  }
+  .ticker span{ padding: 0 28px; }
+  .ticker .dot{ color: var(--accent); }
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(26,27,29,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 28px;
+  }
+  .logo{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-decoration:none;
+    color: var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .mark{ color: var(--accent); }
+  .logo-lockup{ display:inline-flex; align-items:flex-end; }
+  .peak-mark{ width: 26px; height: 22px; display:block; margin-right: -2px; }
+  .logo-word{ font-family: var(--font-mono); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 2px; line-height: 1; }
+  .logo-suffix{ font-family: var(--font-mono); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; color: var(--text); border-bottom: 2px solid transparent; padding-bottom: 2px; line-height: 1; }
+  .logo .sub{ color: var(--text-dim); font-weight: 400; font-size: 11px; display:none; }
+  @media (min-width: 1200px){ .logo .sub{ display:inline; } }
+
+  nav.links{ display:none; gap: 28px; font-size: 14px; }
+  nav.links a{ white-space: nowrap; }
+  @media (max-width: 1100px){ nav.links{ gap: 20px; } }
+  nav.links a{ text-decoration:none; color: var(--text-dim); transition: color .15s; }
+  nav.links a:hover{ color: var(--text); }
+  @media (min-width: 900px){ nav.links{ display:flex; } }
+
+  .btn{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    padding: 10px 18px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: inline-block;
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .btn.primary{ background: var(--accent); color: #1A1B1D; border-color: var(--accent); font-weight: 600; }
+  .btn.primary:hover{ background: #E5A85C; }
+  .btn.ghost:hover{ border-color: var(--text-dim); color: var(--text); background: var(--bg-panel); }
+
+  /* ---------- Hero ---------- */
+  .hero{ position: relative; padding: 84px 0 60px; overflow: hidden; }
+  .hero-content{ position: relative; max-width: 700px; }
+  .hero h1{ font-size: clamp(32px, 4.6vw, 48px); line-height: 1.1; letter-spacing: -0.01em; }
+  .hero p.lede{ color: var(--text-dim); font-size: 16.5px; margin: 18px 0 0; max-width: 560px; }
+  .hero-ctas{ display:flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+  .capabilities{ display:grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 32px; max-width: 560px; }
+  @media (min-width: 640px){ .capabilities{ grid-template-columns: repeat(4,1fr); } }
+  .capability{ border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; }
+  .capability b{ display:block; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); margin-bottom: 4px; }
+  .capability span{ display:block; font-size: 12px; color: var(--text-faint); }
+  .carousel-caption{ font-family: var(--font-mono); font-size: 12.5px; color: var(--text-faint); margin: 0 0 14px; max-width: 640px; }
+
+  /* ---------- Slide carousel ---------- */
+  .carousel-wrap{ position: relative; margin-top: 40px; }
+  .carousel{
+    display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+    border-radius: 8px; border: 1px solid var(--line); background: var(--bg-panel);
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .carousel::-webkit-scrollbar{ display:none; }
+  .slide{
+    flex: 0 0 100%; scroll-snap-align: start; padding: 34px 40px; min-height: 300px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .slide + .slide{ border-left: 1px solid var(--line); }
+  .slide-eyebrow{ font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .slide h3{ font-family: var(--font-body); font-weight: 700; font-size: 21px; margin-bottom: 10px; }
+  .slide p{ color: var(--text-dim); font-size: 14.5px; max-width: 460px; margin: 0; }
+  .slide-inner{ display:flex; align-items:center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .slide-text{ flex: 1 1 240px; }
+  .slide-visual{ flex: 0 1 400px; max-width: 400px; min-width: 0; }
+  .slide-visual svg{ display:block; width:100%; height:auto; }
+  .slide-visual svg#slideSpots{ max-width: 260px; margin: 0 auto; }
+  .slide.intro-slide, .slide.cta-slide{ align-items:center; text-align:center; }
+  .slide.intro-slide h3, .slide.cta-slide h3{ font-size: 26px; max-width: 520px; }
+  .slide.intro-slide p, .slide.cta-slide p{ margin: 0 auto; }
+  .slide.cta-slide .btn{ margin-top: 20px; }
+
+  .carousel-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:38px; height:38px; border-radius:50%;
+    background: var(--bg-panel); border: 1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5;
+    color: var(--text); font-family: var(--font-mono);
+  }
+  .carousel-arrow:hover{ border-color: var(--accent); color: var(--accent); }
+  .carousel-arrow.prev{ left:-19px; }
+  .carousel-arrow.next{ right:-19px; }
+  @media (max-width: 760px){ .carousel-arrow{ display:none; } }
+
+  .carousel-dots{ display:flex; justify-content:center; gap: 8px; margin-top: 16px; }
+  .carousel-dot{ width:7px; height:7px; border-radius:50%; background: var(--line-strong); border:none; cursor:pointer; padding:0; transition: background .15s, transform .15s; }
+  .carousel-dot.active{ background: var(--accent); transform: scale(1.35); }
+
+  /* ---------- Sections generic ---------- */
+  section{ padding: 88px 0; border-top: 1px solid var(--line); }
+  section .head{ max-width: 620px; margin-bottom: 48px; }
+  section h2{ font-size: clamp(26px, 3.4vw, 34px); letter-spacing: -0.01em; }
+  section .head p{ color: var(--text-dim); margin-top: 14px; font-size: 15.5px; }
+
+  /* ---------- Method ---------- */
+  .stages{ display:grid; grid-template-columns: 1fr; gap: 0; }
+  .stage{ display:grid; grid-template-columns: 64px 1fr; gap: 20px; padding: 26px 0; border-top: 1px solid var(--line); }
+  .stage:first-child{ border-top: 1px solid var(--line-strong); }
+  .stage-num{ font-family: var(--font-mono); color: var(--accent); font-size: 13px; padding-top: 3px; }
+  .stage h3{ font-size: 19px; font-weight: 500; margin-bottom: 8px; font-family: var(--font-body); font-weight:600; }
+  .stage p{ color: var(--text-dim); margin: 0; font-size: 15px; max-width: 620px; }
+
+  .pull-quote{ margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .pull-quote p{ font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(20px, 2.6vw, 27px); color: var(--text); max-width: 760px; margin: 0; line-height: 1.4; }
+
+  /* ---------- Data Rescue section ---------- */
+  .subhead{ font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 16px; }
+  .situation-grid{ display:grid; grid-template-columns: 1fr; gap: 10px 28px; }
+  @media (min-width: 760px){ .situation-grid{ grid-template-columns: 1fr 1fr; } }
+  .situation-grid div{ color: var(--text-dim); font-size: 14px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .situation-grid div::before{ content:'—'; position:absolute; left:0; color: var(--accent); }
+  .subcol-grid{ display:grid; grid-template-columns: 1fr; gap: 28px; }
+  @media (min-width: 640px){ .subcol-grid{ grid-template-columns: 1fr 1fr; } }
+  .subcol-grid b{ display:block; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); margin-bottom: 10px; letter-spacing: .03em; }
+  .subcol-grid ul{ list-style:none; margin:0; padding:0; display:grid; gap: 7px; }
+  .subcol-grid li{ color: var(--text-dim); font-size: 13.5px; padding-left: 14px; position: relative; }
+  .subcol-grid li::before{ content:'·'; position:absolute; left:0; color: var(--text-faint); }
+
+  /* ---------- Outputs ---------- */
+  .outputs{ display:grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 900px){ .outputs{ grid-template-columns: 1fr 1fr; } }
+  .output-card{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 6px; padding: 22px; }
+  .output-card h3{ font-family: var(--font-body); font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+  .output-card .sub{ color: var(--text-faint); font-size: 12.5px; font-family: var(--font-mono); margin-bottom: 16px; }
+  .output-card svg{ display:block; width:100%; height:auto; }
+  .stats{
+    margin-top: 16px; display:grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+    font-family: var(--font-mono); font-size: 12px; border-top: 1px solid var(--line); padding-top: 14px;
+  }
+  .stats div span{ display:block; color: var(--text-faint); font-size: 10.5px; margin-bottom: 3px; letter-spacing: .04em; }
+  .stats div b{ color: var(--text); font-weight: 500; font-size: 14px; }
+  .legend{ display:flex; gap:16px; flex-wrap:wrap; font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-top: 10px; }
+  .legend i{ display:inline-block; width:10px; height:2px; margin-right:6px; vertical-align: middle; }
+
+  /* ---------- Applications ---------- */
+  .app-grid{ display:grid; grid-template-columns: 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow:hidden; }
+  @media (min-width: 720px){ .app-grid{ grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1020px){ .app-grid-6{ grid-template-columns: 1fr 1fr 1fr; } }
+  .app-card{ background: var(--bg-panel); padding: 28px; }
+  .app-card .tag{ font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: .05em; margin-bottom: 10px; text-transform: uppercase;}
+  .app-card h3{ font-family: var(--font-body); font-weight: 600; font-size: 17px; margin-bottom: 10px; }
+  .app-card p{ color: var(--text-dim); font-size: 14.5px; margin:0; }
+
+  /* ---------- Services (technical) ---------- */
+  .service-grid{ display:grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 900px){ .service-grid{ grid-template-columns: repeat(3,1fr); } }
+  .service-detail{ border: 1px solid var(--line); border-radius: 6px; padding: 26px; transition: border-color .15s; }
+  .service-detail:hover{ border-color: var(--line-strong); }
+  .service-detail h3{ font-family: var(--font-body); font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+  .service-detail > p{ color: var(--text-dim); font-size: 14px; margin: 0 0 16px; }
+  .service-detail ul{ list-style:none; margin:0; padding:0; display:grid; gap: 8px; }
+  .service-detail li{ color: var(--text-dim); font-size: 13.5px; padding-left: 16px; position: relative; }
+  .service-detail li::before{ content:'—'; position:absolute; left:0; color: var(--accent); }
+
+  .tier-note{ margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .tiers{ display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 18px; }
+  @media (min-width: 720px){ .tiers{ grid-template-columns: repeat(3,1fr); } }
+  .tier{ border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+  .tier b{ display:block; font-family: var(--font-mono); font-size: 13px; color: var(--accent); margin-bottom: 4px; }
+  .tier span{ display:block; font-size: 13px; color: var(--text-dim); }
+  .tier-note > p{ font-size: 14.5px; color: var(--text-dim); margin:0; }
+  .tier-note > p a{ color: var(--accent); text-decoration: underline; }
+
+  .consult{ margin-top: 48px; padding-top: 36px; border-top: 1px solid var(--line); }
+  .consult-head{ max-width: 680px; margin-bottom: 24px; }
+  .consult-head h3{ font-family: var(--font-body); font-weight: 700; font-size: 20px; margin-bottom: 10px; }
+  .consult-head p{ color: var(--text-dim); font-size: 15px; margin: 0; }
+  .consult-grid{ display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 18px; }
+  @media (min-width: 720px){ .consult-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (min-width: 1020px){ .consult-grid{ grid-template-columns: repeat(4,1fr); } }
+  .consult-note{ font-size: 14.5px; color: var(--text-dim); margin: 0; }
+  .consult-note a{ color: var(--accent); text-decoration: underline; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 900px){ .about-grid{ grid-template-columns: 1.1fr 0.9fr; } }
+  .about-grid p{ color: var(--text-dim); font-size: 15px; }
+  .about-grid p.about-lead{ color: var(--text); font-size: 17px; line-height: 1.55; }
+  .chip-list{ display:flex; flex-wrap:wrap; gap: 8px; }
+  .chip{ font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); border: 1px solid var(--line-strong); border-radius: 20px; padding: 6px 13px; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 900px){ .contact-grid{ grid-template-columns: 0.9fr 1.1fr; } }
+  .contact-info p{ color: var(--text-dim); font-size: 15px; }
+  .contact-info .email{ font-family: var(--font-mono); color: var(--accent); text-decoration:none; font-size: 15px; }
+  .contact-info .email:hover{ text-decoration: underline; }
+  form{ display:grid; gap: 16px; }
+  .field{ display:grid; gap: 6px; }
+  label{ font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); letter-spacing: .04em; text-transform: uppercase; }
+  input, textarea, select{
+    background: var(--bg-panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 11px 12px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14.5px;
+  }
+  input:focus, textarea:focus, select:focus{ border-color: var(--accent); }
+  textarea{ resize: vertical; min-height: 110px; }
+  .form-note{ font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); margin-top: -4px; }
+
+  /* ---------- Footer ---------- */
+  footer{ border-top: 1px solid var(--line); padding: 32px 0; }
+  .foot-inner{ display:flex; justify-content: space-between; align-items:center; flex-wrap: wrap; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{ opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#top">
+      <span class="logo-lockup"><svg class="peak-mark" viewBox="0 0 30 26" aria-hidden="true"><path d="M2,24 C8,24 12,5 15,2 C18,5 22,24 28,24" fill="none" stroke="var(--accent)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">nalisa</span><span class="logo-suffix">.D</span></span><span class="sub">// structural analysis for complex materials</span>
+    </a>
+    <nav class="links">
+      <a href="science.html">Science</a>
+      <a href="#data-rescue">Data Analysis</a>
+      <a href="#services">Services</a>
+      <a href="#applications">Applications</a>
+      <a href="#approach">Approach</a>
+      <a href="#about">About</a>
+    </nav>
+    <a class="btn primary" href="#contact">Request an Analysis</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="border-top:none; padding-top: 84px;">
+    <div class="wrap">
+      <div class="hero-content">
+        <p class="eyebrow">POWDER DIFFRACTION · TOTAL SCATTERING · PDF ANALYSIS · STRUCTURAL MODELLING</p>
+        <h1>Advanced structural analysis for complex materials.</h1>
+        <p class="lede">From diffraction data to structural insight — analysis of powder diffraction and total-scattering data for researchers and R&amp;D teams working with complex materials.</p>
+        <div class="hero-ctas">
+          <a class="btn primary" href="#contact">Request an Analysis</a>
+          <a class="btn ghost" href="#services">Explore Services</a>
+        </div>
+        <div class="capabilities">
+          <div class="capability"><b>PXRD &amp; Rietveld</b><span>Average crystal structure</span></div>
+          <div class="capability"><b>PDF Analysis</b><span>Local atomic structure</span></div>
+          <div class="capability"><b>RMC</b><span>Disorder &amp; correlations</span></div>
+          <div class="capability"><b>DFT</b><span>Atomistic interpretation</span></div>
+        </div>
+      </div>
+
+      <div class="carousel-wrap reveal">
+        <p class="carousel-caption">Scroll through a few cases to see how the same kind of measurement plays out differently depending on what you're studying.</p>
+        <button class="carousel-arrow prev" id="carPrev" aria-label="Previous slide">←</button>
+        <div class="carousel" id="carousel">
+
+          <div class="slide intro-slide">
+            <p class="slide-eyebrow">01 — The idea</p>
+            <h3>We infer structural pattern from raw diffraction data.</h3>
+            <p>Every analysis starts the same way: counts on a detector, turned into a structural answer through careful reduction, refinement, and modeling.</p>
+          </div>
+
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-text">
+                <p class="slide-eyebrow">02 — Case</p>
+                <h3>Nanoparticles</h3>
+                <p>Sub-10 nm particles broaden and weaken Bragg peaks. Total scattering recovers coordination environments conventional refinement can't reach.</p>
+              </div>
+              <div class="slide-visual"><svg id="slideNano" viewBox="0 0 420 220" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-text">
+                <p class="slide-eyebrow">03 — Case</p>
+                <h3>Pharmaceutical molecules</h3>
+                <p>Dense, low-symmetry powder patterns from organic crystals — used for polymorph identification and crystallinity tracking.</p>
+              </div>
+              <div class="slide-visual"><svg id="slidePharma" viewBox="0 0 420 220" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-text">
+                <p class="slide-eyebrow">04 — Case</p>
+                <h3>Single crystal</h3>
+                <p>Discrete reflections index directly to a unit cell — the average structure resolved at its most precise.</p>
+              </div>
+              <div class="slide-visual"><svg id="slideSpots" viewBox="0 0 260 260" aria-hidden="true"></svg></div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-text">
+                <p class="slide-eyebrow">05 — Case</p>
+                <h3>Amorphous solids</h3>
+                <p>No Bragg peaks at all. PDF is often the only quantitative route to short- and medium-range structure.</p>
+              </div>
+              <div class="slide-visual"><svg id="slideAmorphous" viewBox="0 0 420 220" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-text">
+                <p class="slide-eyebrow">06 — Case</p>
+                <h3>Battery electrodes</h3>
+                <p>Cycling drives local disorder that average-structure refinement misses. PDF tracks it directly — pristine vs. cycled.</p>
+              </div>
+              <div class="slide-visual"><svg id="slideBattery" viewBox="0 0 420 220" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+            </div>
+          </div>
+
+          <div class="slide cta-slide">
+            <p class="slide-eyebrow">07 — Next step</p>
+            <h3>For a quick solution, send us your data.</h3>
+            <p>We'll take a first look and tell you what's possible within a few days.</p>
+            <a class="btn primary" href="#contact">Send your data →</a>
+          </div>
+
+        </div>
+        <button class="carousel-arrow next" id="carNext" aria-label="Next slide">→</button>
+      </div>
+      <div class="carousel-dots" id="carDots"></div>
+    </div>
+  </section>
+
+  <section id="data-rescue">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">Data Rescue &amp; Analysis</p>
+        <h2>Give valuable experimental datasets a life.</h2>
+        <p>Every year, researchers collect enormous amounts of data at synchrotron, neutron and laboratory facilities. Time constraints, new projects, staff changes and complex analysis mean not every dataset reaches its full scientific potential — sometimes it just sits on a hard drive. We help researchers revisit previously collected datasets and extract information that may have been overlooked, unexplored or inaccessible with the original analysis.</p>
+      </div>
+
+      <div class="pull-quote reveal" style="margin-top:0; padding-top:0; border-top:none; margin-bottom:44px;">
+        <p>“The experiment may be finished. The science doesn't have to be.”</p>
+      </div>
+
+      <div class="reveal" style="margin-bottom:48px;">
+        <p class="subhead">Typical situations</p>
+        <div class="situation-grid">
+          <div>A synchrotron experiment was completed but only preliminary analysis was performed.</div>
+          <div>A neutron scattering dataset was collected but never fully modelled.</div>
+          <div>A PhD project ended before all measurements could be analysed.</div>
+          <div>A researcher has inherited datasets from a previous group member.</div>
+          <div>A publication used only part of a large experimental dataset.</div>
+          <div>New analysis methods now make an old dataset more informative.</div>
+          <div>A new scientific question has emerged from an existing dataset.</div>
+          <div>A facility measurement was technically successful but analysis was postponed.</div>
+        </div>
+      </div>
+
+      <div class="reveal" style="margin-bottom:48px;">
+        <p class="subhead">Synchrotron &amp; neutron data</p>
+        <p style="color:var(--text-dim); font-size:14.5px; max-width:680px; margin:-4px 0 20px;">Beamtime is valuable — the resulting datasets can be even more valuable. We provide specialised analysis support for previously collected synchrotron and neutron diffraction and total-scattering data.</p>
+        <div class="subcol-grid">
+          <div>
+            <b>Synchrotron</b>
+            <ul>
+              <li>High-energy X-ray diffraction</li>
+              <li>Total scattering</li>
+              <li>Pair Distribution Function (PDF) analysis</li>
+              <li>Temperature-dependent measurements</li>
+              <li>In-situ / operando datasets</li>
+            </ul>
+          </div>
+          <div>
+            <b>Neutron</b>
+            <ul>
+              <li>Neutron powder diffraction</li>
+              <li>Neutron total scattering</li>
+              <li>Neutron PDF</li>
+              <li>Variable-temperature datasets</li>
+              <li>Multi-condition datasets</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-grid reveal">
+        <div class="service-detail">
+          <h3>Data Discovery Audit</h3>
+          <p>We review an existing collection of datasets and identify which measurements are most suitable for further analysis.</p>
+          <ul>
+            <li>Dataset inventory</li>
+            <li>Data-quality assessment</li>
+            <li>Recommended analysis approach</li>
+            <li>Potential scientific opportunities</li>
+            <li>Prioritisation of datasets</li>
+            <li>Estimated analysis scope and cost</li>
+          </ul>
+        </div>
+        <div class="service-detail">
+          <h3>Data Rescue Project</h3>
+          <p>We analyse a selected group of previously collected datasets and provide a focused scientific assessment.</p>
+          <ul>
+            <li>Data-quality review</li>
+            <li>Appropriate processing and analysis</li>
+            <li>Identification of useful structural information</li>
+            <li>Figures and key results</li>
+            <li>Concise technical report</li>
+            <li>Recommendations for deeper analysis</li>
+          </ul>
+        </div>
+        <div class="service-detail">
+          <h3>Advanced Structural Investigation</h3>
+          <p>For datasets requiring detailed PDF, RMC, big-box or other advanced structural modelling.</p>
+          <ul>
+            <li>PDF analysis</li>
+            <li>Structural modelling</li>
+            <li>RMC / big-box modelling where appropriate</li>
+            <li>Local structural interpretation</li>
+            <li>Comparison of structural models</li>
+            <li>Detailed report and publication-quality figures</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tier-note reveal">
+        <p>Have an old dataset? <a href="#contact">Send it to us.</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">What we do</p>
+        <h2>Services</h2>
+        <p>Analysis matched to the scientific question. From routine phase identification to advanced local-structure modelling, we provide focused analysis rather than one-size-fits-all data processing.</p>
+      </div>
+      <div class="service-grid reveal">
+        <div class="service-detail">
+          <h3>Powder Diffraction Analysis</h3>
+          <p>PXRD analysis for phase identification, structural refinement and quantitative interpretation.</p>
+          <ul>
+            <li>Phase identification</li>
+            <li>Rietveld refinement</li>
+            <li>Quantitative phase analysis</li>
+            <li>Unit-cell and profile analysis</li>
+            <li>Crystallite size and microstrain</li>
+            <li>Variable-temperature datasets</li>
+          </ul>
+        </div>
+        <div class="service-detail">
+          <h3>PDF &amp; Total Scattering</h3>
+          <p>Real-space analysis for materials whose local structure is not captured by average crystallography alone.</p>
+          <ul>
+            <li>Total-scattering processing</li>
+            <li>PDF generation and validation</li>
+            <li>Structural modelling</li>
+            <li>Short- and medium-range order</li>
+            <li>Local coordination environments</li>
+            <li>Disorder and local distortions</li>
+          </ul>
+        </div>
+        <div class="service-detail">
+          <h3>Advanced Structural Modelling</h3>
+          <p>Atomistic approaches for complex structures, disorder and local correlations.</p>
+          <ul>
+            <li>Reverse Monte Carlo</li>
+            <li>Big-box modelling</li>
+            <li>Atomistic structural models</li>
+            <li>DFT-informed interpretation</li>
+            <li>Defects and local symmetry breaking</li>
+            <li>Model–experiment comparison</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tier-note reveal">
+        <div class="tiers">
+          <div class="tier"><b>Basic</b><span>Data processing and standard analysis</span></div>
+          <div class="tier"><b>Advanced</b><span>Detailed refinement and structural interpretation</span></div>
+          <div class="tier"><b>Research</b><span>PDF, advanced modelling and scientific interpretation</span></div>
+        </div>
+        <p>Every dataset is different. <a href="#contact">Contact us</a> for a tailored quotation.</p>
+      </div>
+
+      <div class="consult reveal">
+        <p class="subhead">Scientific consulting</p>
+        <div class="consult-head">
+          <h3>Support in developing projects</h3>
+          <p>Powder diffraction and total-scattering methods often have to be planned before any data exist. We can advise on developing projects in which these experimental methods are essential — from the first idea to the experiment itself.</p>
+        </div>
+        <div class="consult-grid">
+          <div class="tier"><b>Grant applications</b><span>Defining the structural-analysis component, methods and expected outcomes of a project.</span></div>
+          <div class="tier"><b>Beamtime proposals</b><span>Choosing technique, facility and measurement strategy, and strengthening the scientific case.</span></div>
+          <div class="tier"><b>Instrument acquisition</b><span>Advising on requirements and specifications for diffraction and scattering instrumentation.</span></div>
+          <div class="tier"><b>Support during beamtime</b><span>Help with measurement strategy and analysis while the experiment is running, where needed.</span></div>
+        </div>
+        <p class="consult-note">Scope is agreed per project. <a href="#contact">Tell us about your project</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="output">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">Sample output</p>
+        <h2>From data to deliverable</h2>
+        <p>Illustrative examples, not live data. Every project ships with the fit, the residual, and the numbers behind it.</p>
+      </div>
+      <div class="outputs reveal">
+        <div class="output-card">
+          <h3>Rietveld refinement</h3>
+          <div class="sub">Observed vs. calculated, with difference curve and reflection markers</div>
+          <svg id="rietveldChart" viewBox="0 0 620 300" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="legend">
+            <span><i style="background:var(--blue)"></i>Observed</span>
+            <span><i style="background:var(--accent)"></i>Calculated</span>
+            <span><i style="background:var(--rose)"></i>Difference</span>
+            <span><i style="background:var(--text-faint)"></i>Reflections</span>
+          </div>
+          <div class="stats">
+            <div><span>Rwp</span><b>4.82%</b></div>
+            <div><span>Rp</span><b>3.71%</b></div>
+            <div><span>χ²</span><b>1.24</b></div>
+          </div>
+        </div>
+        <div class="output-card">
+          <h3>Pair distribution function</h3>
+          <div class="sub">G(r), fitted over 1.5–20 Å with labeled coordination shells</div>
+          <svg id="gChart" viewBox="0 0 620 300" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="legend">
+            <span><i style="background:var(--blue)"></i>Experimental G(r)</span>
+            <span><i style="background:var(--accent)"></i>Model fit</span>
+          </div>
+          <div class="stats">
+            <div><span>Fit range</span><b>1.5–20 Å</b></div>
+            <div><span>Rw</span><b>11.3%</b></div>
+            <div><span>1st shell</span><b>1.98 Å</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="applications">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">Built for complex materials</p>
+        <h2>Applications</h2>
+        <p>A sample of the material classes and scientific problems we're usually called in for.</p>
+      </div>
+      <div class="app-grid app-grid-6 reveal">
+        <div class="app-card">
+          <div class="tag">Functional materials</div>
+          <h3>Ferroelectric &amp; relaxor materials</h3>
+          <p>Local structural distortions, disorder and correlations in functional ferroelectrics.</p>
+        </div>
+        <div class="app-card">
+          <div class="tag">Oxides</div>
+          <h3>Perovskite oxides</h3>
+          <p>Average and local structure of compositionally complex and distorted perovskites.</p>
+        </div>
+        <div class="app-card">
+          <div class="tag">Ceramics</div>
+          <h3>Functional ceramics</h3>
+          <p>Phase evolution, refinement and structure–property relationships.</p>
+        </div>
+        <div class="app-card">
+          <div class="tag">Energy</div>
+          <h3>Energy materials</h3>
+          <p>Structural changes associated with synthesis, composition and operation.</p>
+        </div>
+        <div class="app-card">
+          <div class="tag">Nanoscale</div>
+          <h3>Nanomaterials</h3>
+          <p>Finite-size effects, disorder and deviations from ideal crystalline structures.</p>
+        </div>
+        <div class="app-card">
+          <div class="tag">Disorder</div>
+          <h3>Disordered materials</h3>
+          <p>Real-space analysis where conventional crystallography provides only part of the picture.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="approach">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">How we think about it</p>
+        <h2>Beyond Peak Fitting</h2>
+        <p>Many materials contain disorder, nanoscale effects and local distortions that can remain hidden in an average crystallographic model. We combine reciprocal-space and real-space methods to investigate materials across multiple length scales. The goal is not simply to process a dataset, but to answer the scientific question behind it.</p>
+      </div>
+      <div class="stages reveal">
+        <div class="stage">
+          <div class="stage-num">01</div>
+          <div><h3>Define the question</h3><p>What structural information do you need?</p></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">02</div>
+          <div><h3>Choose the method</h3><p>PXRD, total scattering, PDF or advanced modelling.</p></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">03</div>
+          <div><h3>Analyse &amp; model</h3><p>Reproducible processing, refinement and interpretation.</p></div>
+        </div>
+        <div class="stage">
+          <div class="stage-num">04</div>
+          <div><h3>Deliver insight</h3><p>Results, figures and a clear scientific explanation.</p></div>
+        </div>
+      </div>
+      <div class="pull-quote reveal">
+        <p>“The objective is not only to fit the data, but to understand the structure that produced it.”</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="about-grid reveal">
+        <div>
+          <p class="eyebrow">About</p>
+          <h2>Scientific Expertise. Practical Analysis.</h2>
+          <p class="about-lead">We are a team of young scientists with years of experience in data analysis, specialising in investigating the structure of materials.</p>
+          <p>Specialised structural-data analysis for researchers and technology teams who need deeper insight from diffraction and total-scattering experiments. Our expertise spans powder diffraction, total scattering, Pair Distribution Function analysis, structural refinement and atomistic modelling of complex functional materials. We work with laboratory, synchrotron and neutron datasets and tailor the analysis to the material, measurement and scientific objective.</p>
+        </div>
+        <div>
+          <p class="eyebrow">Core expertise</p>
+          <div class="chip-list">
+            <span class="chip">Powder XRD</span>
+            <span class="chip">Rietveld refinement</span>
+            <span class="chip">Total scattering</span>
+            <span class="chip">PDF analysis</span>
+            <span class="chip">Reverse Monte Carlo</span>
+            <span class="chip">Big-box modelling</span>
+            <span class="chip">Atomistic modelling</span>
+            <span class="chip">DFT</span>
+            <span class="chip">Complex oxides</span>
+            <span class="chip">Ferroelectric materials</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-grid reveal">
+        <div class="contact-info">
+          <p class="eyebrow">Request an Analysis</p>
+          <h2>Tell us about your dataset</h2>
+          <p>Send a short description of your material, data and scientific question. We will assess the project and propose an appropriate analysis strategy. No commitment is required at this stage.</p>
+          <p>Prefer email directly?<br><a class="email" href="mailto:info@analisa-data.com">info@analisa-data.com</a></p>
+        </div>
+        <form id="contactForm">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="org">Organisation</label>
+            <input id="org" name="org" type="text">
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+          <div class="field">
+            <label for="dataType">Data type</label>
+            <select id="dataType" name="dataType">
+              <option>Powder XRD</option>
+              <option>Synchrotron XRD</option>
+              <option>Neutron diffraction</option>
+              <option>Total scattering &amp; PDF</option>
+              <option>Project / proposal support (no dataset yet)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="material">Material / sample</label>
+            <input id="material" name="material" type="text">
+          </div>
+          <div class="field">
+            <label for="determine">What would you like to determine?</label>
+            <input id="determine" name="determine" type="text">
+          </div>
+          <div class="field">
+            <label for="question">Scientific question</label>
+            <textarea id="question" name="question" required placeholder="What are you trying to learn from this data?"></textarea>
+          </div>
+          <div class="field">
+            <label for="deadline">Expected deadline</label>
+            <input id="deadline" name="deadline" type="text" placeholder="e.g. 4 weeks, or a specific date">
+          </div>
+          <p class="form-note">Dataset upload will be handled separately via secure file transfer — no need to attach anything here. Opens your email client with this pre-filled; nothing is stored or sent from this page.</p>
+          <button class="btn primary" type="submit" style="justify-self:start;">Request an Analysis</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>ANALISA — advanced structural analysis for complex materials</span>
+    <span><a href="science.html" style="color:inherit;">The science</a> · © 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const NS = "http://www.w3.org/2000/svg";
+  function el(name, attrs){
+    const e = document.createElementNS(NS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function mulberry32(seed){
+    return function(){
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  const rng = mulberry32(42);
+
+  function gaussian(x, x0, s){ return Math.exp(-((x-x0)*(x-x0))/(2*s*s)); }
+
+  // ---------- Reciprocal-space profile generator ----------
+  const profilePeaks = [
+    {x:12.4,i:0.35,w:0.16},{x:17.6,i:0.92,w:0.14},{x:21.8,i:1.0,w:0.15},
+    {x:25.3,i:0.55,w:0.14},{x:28.9,i:0.78,w:0.16},{x:31.4,i:0.32,w:0.14},
+    {x:35.0,i:0.44,w:0.17},{x:38.2,i:0.24,w:0.15},{x:41.6,i:0.19,w:0.16},
+    {x:44.9,i:0.30,w:0.17},{x:48.1,i:0.16,w:0.16},{x:53.6,i:0.13,w:0.18},
+    {x:58.0,i:0.11,w:0.19}
+  ];
+  function profileY(x){
+    let y = 0.04;
+    for (const p of profilePeaks) y += p.i * gaussian(x, p.x, p.w);
+    return y;
+  }
+
+  // ---------- Real-space G(r) generator ----------
+  const rPeaks = [
+    {r:1.98,a:0.95,s:0.055},{r:2.45,a:0.42,s:0.06},{r:2.83,a:0.8,s:0.07},
+    {r:3.46,a:0.28,s:0.08},{r:3.99,a:0.58,s:0.09},{r:4.62,a:0.22,s:0.10},
+    {r:4.90,a:0.4,s:0.10},{r:5.63,a:0.18,s:0.11}
+  ];
+  function grY(r){
+    const envelope = Math.exp(-(r-1.0)/9.5);
+    let y = 0;
+    for (const p of rPeaks){
+      y += p.a * envelope * gaussian(r, p.r, p.s);
+      y -= 0.32 * p.a * envelope * gaussian(r, p.r + 0.42, p.s*1.3);
+    }
+    y += 0.02 * Math.sin(r*5.5) * envelope;
+    return y;
+  }
+
+  function buildSeries(fn, xmin, xmax, n, noiseAmp, seedOffset){
+    const localRng = mulberry32(1000 + seedOffset);
+    const pts = [];
+    for (let k=0;k<=n;k++){
+      const x = xmin + (xmax-xmin)*k/n;
+      let y = fn(x);
+      if (noiseAmp) y += (localRng()-0.5)*noiseAmp;
+      pts.push([x,y]);
+    }
+    return pts;
+  }
+
+  function toPixels(pts, xmin, xmax, ymin, ymax, W, H, padL, padR, padT, padB){
+    return pts.map(([x,y])=>{
+      const px = padL + (x-xmin)/(xmax-xmin) * (W-padL-padR);
+      const py = H - padB - (y-ymin)/(ymax-ymin) * (H-padT-padB);
+      return [px,py];
+    });
+  }
+  function pointsAttr(pxPts){ return pxPts.map(p=>p[0].toFixed(2)+","+p[1].toFixed(2)).join(" "); }
+
+  // ---------- Simple line-chart renderer (used by carousel slides) ----------
+  function renderSimple(svgId, series, xmin, xmax, ymin, ymax, color, opacity){
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    const W=420,H=220,padL=8,padR=8,padT=14,padB=14;
+    const px = toPixels(series, xmin, xmax, ymin, ymax, W,H,padL,padR,padT,padB);
+    svg.appendChild(el('line',{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,stroke:'var(--line)','stroke-width':1}));
+    svg.appendChild(el('polyline',{points:pointsAttr(px),fill:'none',stroke:color,'stroke-width':1.8,'stroke-linejoin':'round',opacity: opacity||1}));
+  }
+
+  // Nanoparticles: same peak positions as the lab profile, but heavily broadened
+  function nanoY(x){
+    let y = 0.04;
+    [{x:21,i:1.0,w:2.6},{x:31,i:0.62,w:3.0},{x:44,i:0.4,w:3.4},{x:52,i:0.22,w:3.6}].forEach(p=>{
+      y += p.i * gaussian(x, p.x, p.w);
+    });
+    return y;
+  }
+  renderSimple('slideNano', buildSeries(nanoY,8,60,300,0.006,101), 8,60,0,1.05,'var(--accent)');
+
+  // Pharmaceutical molecules: many sharp, closely spaced low-angle peaks
+  function pharmaY(x){
+    let y = 0.03;
+    const peaks = [6.1,7.8,9.4,11.2,12.6,14.1,15.9,17.4,19.0,20.8,22.5,24.1,26.3,28.0];
+    const pRng = mulberry32(55);
+    peaks.forEach(px=>{ y += (0.3+pRng()*0.7) * gaussian(x, px, 0.09); });
+    return y;
+  }
+  renderSimple('slidePharma', buildSeries(pharmaY,4,30,320,0.006,102), 4,30,0,1.05,'var(--blue)');
+
+  // Amorphous: one broad diffuse halo, no sharp features
+  function amorphousY(x){ return 0.05 + 0.9*gaussian(x, 26, 7.5); }
+  renderSimple('slideAmorphous', buildSeries(amorphousY,5,55,300,0.008,103), 5,55,0,1.05,'var(--rose)');
+
+  // Battery: pristine vs. cycled electrode, overlaid
+  renderSimple('slideBattery', buildSeries(profileY,10,62,320,0.006,104), 10,62,0,1.05,'var(--blue)', 0.85);
+  function cycledY(x){
+    let y = 0.04;
+    profilePeaks.forEach(p=>{ y += (p.i*0.65) * gaussian(x, p.x+0.35, p.w*1.9); });
+    return y;
+  }
+  renderSimple('slideBattery', buildSeries(cycledY,10,62,320,0.006,105), 10,62,0,1.05,'var(--accent)');
+
+  // Single crystal: discrete reflection spots on a lattice grid
+  (function(){
+    const svg = document.getElementById('slideSpots');
+    if (!svg) return;
+    const spotRng = mulberry32(9);
+    const size = 260, cx = size/2, cy = size/2, step = 30;
+    for (let i=-4;i<=4;i++){
+      for (let j=-4;j<=4;j++){
+        const x = cx + i*step, y = cy + j*step;
+        if (x < 6 || x > size-6 || y < 6 || y > size-6) continue;
+        const isCenter = (i===0 && j===0);
+        const intensity = isCenter ? 1 : spotRng();
+        if (intensity < 0.22 && !isCenter) continue; // systematic absence
+        const r = isCenter ? 5 : 1.3 + intensity*3.4;
+        svg.appendChild(el('circle',{
+          cx:x.toFixed(1), cy:y.toFixed(1), r:r.toFixed(2),
+          fill: isCenter ? 'var(--text)' : 'var(--accent)',
+          opacity: isCenter ? 0.55 : (0.35 + intensity*0.6).toFixed(2)
+        }));
+      }
+    }
+  })();
+
+  // ---------- Carousel controls ----------
+  (function(){
+    const car = document.getElementById('carousel');
+    if (!car) return;
+    const slides = Array.from(car.querySelectorAll('.slide'));
+    const dotsWrap = document.getElementById('carDots');
+    const dots = slides.map((_, i) => {
+      const b = document.createElement('button');
+      b.className = 'carousel-dot' + (i===0 ? ' active' : '');
+      b.setAttribute('aria-label', 'Go to slide ' + (i+1));
+      b.addEventListener('click', () => slides[i].scrollIntoView({behavior:'smooth', inline:'start', block:'nearest'}));
+      dotsWrap.appendChild(b);
+      return b;
+    });
+
+    const dotIO = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if (entry.isIntersecting){
+          const idx = slides.indexOf(entry.target);
+          dots.forEach((d,i)=> d.classList.toggle('active', i===idx));
+        }
+      });
+    }, {root: car, threshold: 0.6});
+    slides.forEach(s => dotIO.observe(s));
+
+    document.getElementById('carPrev').addEventListener('click', ()=> car.scrollBy({left: -car.clientWidth, behavior:'smooth'}));
+    document.getElementById('carNext').addEventListener('click', ()=> car.scrollBy({left: car.clientWidth, behavior:'smooth'}));
+
+    car.setAttribute('tabindex','0');
+    car.addEventListener('keydown', (e)=>{
+      if (e.key === 'ArrowRight') car.scrollBy({left: car.clientWidth, behavior:'smooth'});
+      if (e.key === 'ArrowLeft') car.scrollBy({left: -car.clientWidth, behavior:'smooth'});
+    });
+  })();
+
+  // ---------- Output card: Rietveld ----------
+  (function(){
+    const svg = document.getElementById('rietveldChart');
+    const W=620,H=300,padL=10,padR=10,padT=16,padB=30;
+    const xmin=10,xmax=62,ymin=-0.30,ymax=1.08;
+
+    const calc = buildSeries(profileY,xmin,xmax,500,0,10);
+    const calcPx = toPixels(calc,xmin,xmax,ymin,ymax,W,H,padL,padR,padT,padB);
+
+    // baseline
+    svg.appendChild(el('line',{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,stroke:'var(--line)','stroke-width':1}));
+
+    // reflection tick marks
+    profilePeaks.forEach(p=>{
+      const px = padL + (p.x-xmin)/(xmax-xmin)*(W-padL-padR);
+      const yBase = H - padB + 8;
+      svg.appendChild(el('line',{x1:px,y1:yBase,x2:px,y2:yBase+7,stroke:'var(--text-faint)','stroke-width':1.4}));
+    });
+
+    // difference curve (offset below)
+    const diffOffset = -0.16;
+    const diffRng = mulberry32(77);
+    const diffPts = calc.map(([x,y])=>{
+      const noise = (diffRng()-0.5)*0.03;
+      return [x, diffOffset + noise];
+    });
+    const diffPx = toPixels(diffPts,xmin,xmax,ymin,ymax,W,H,padL,padR,padT,padB);
+    svg.appendChild(el('polyline',{points:pointsAttr(diffPx),fill:'none',stroke:'var(--rose)','stroke-width':1,opacity:'0.85'}));
+
+    // calculated line
+    svg.appendChild(el('polyline',{points:pointsAttr(calcPx),fill:'none',stroke:'var(--accent)','stroke-width':1.8}));
+
+    // observed points (sparser, jittered)
+    const obsRng = mulberry32(21);
+    for (let k=0;k<=110;k++){
+      const x = xmin + (xmax-xmin)*k/110;
+      const y = profileY(x) + (obsRng()-0.5)*0.035;
+      const px = padL + (x-xmin)/(xmax-xmin)*(W-padL-padR);
+      const py = H - padB - (y-ymin)/(ymax-ymin)*(H-padT-padB);
+      svg.appendChild(el('circle',{cx:px.toFixed(2),cy:py.toFixed(2),r:1.6,fill:'var(--blue)',opacity:'0.8'}));
+    }
+
+    // axis labels
+    const lbl1 = el('text',{x:padL,y:H-8,'font-family':'JetBrains Mono, monospace','font-size':'10','fill':'var(--text-faint)'});
+    lbl1.textContent = '2θ (°) →'; svg.appendChild(lbl1);
+  })();
+
+  // ---------- Output card: G(r) with shell labels ----------
+  (function(){
+    const svg = document.getElementById('gChart');
+    const W=620,H=300,padL=14,padR=14,padT=20,padB=34;
+    const xmin=1.0,xmax=8.0,ymin=-0.5,ymax=1.05;
+
+    const exp = buildSeries(grY,xmin,xmax,480,0.018,33);
+    const expPx = toPixels(exp,xmin,xmax,ymin,ymax,W,H,padL,padR,padT,padB);
+    const model = buildSeries(grY,xmin,xmax,480,0,44);
+    const modelPx = toPixels(model,xmin,xmax,ymin,ymax,W,H,padL,padR,padT,padB);
+
+    // zero line
+    const zeroPy = H - padB - (0-ymin)/(ymax-ymin)*(H-padT-padB);
+    svg.appendChild(el('line',{x1:padL,y1:zeroPy,x2:W-padR,y2:zeroPy,stroke:'var(--line)','stroke-width':1}));
+
+    svg.appendChild(el('polyline',{points:pointsAttr(expPx),fill:'none',stroke:'var(--blue)','stroke-width':1.3,opacity:'0.75'}));
+    svg.appendChild(el('polyline',{points:pointsAttr(modelPx),fill:'none',stroke:'var(--accent)','stroke-width':1.8}));
+
+    // shell labels on first three peaks
+    const labeled = [
+      {r:1.98, txt:'1.98 Å'},
+      {r:2.83, txt:'2.83 Å'},
+      {r:3.99, txt:'3.99 Å'}
+    ];
+    labeled.forEach(item=>{
+      const px = padL + (item.r-xmin)/(xmax-xmin)*(W-padL-padR);
+      const y = grY(item.r);
+      const py = H - padB - (y-ymin)/(ymax-ymin)*(H-padT-padB);
+      svg.appendChild(el('line',{x1:px,y1:py-4,x2:px,y2:padT-4,stroke:'var(--line-strong)','stroke-width':1,'stroke-dasharray':'2 3'}));
+      const t = el('text',{x:px,y:padT-8,'text-anchor':'middle','font-family':'JetBrains Mono, monospace','font-size':'10','fill':'var(--text-dim)'});
+      t.textContent = item.txt;
+      svg.appendChild(t);
+    });
+
+    const lbl = el('text',{x:padL,y:H-10,'font-family':'JetBrains Mono, monospace','font-size':'10','fill':'var(--text-faint)'});
+    lbl.textContent = 'r (Å) →'; svg.appendChild(lbl);
+  })();
+
+  // ---------- Scroll reveal ----------
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold: 0.12});
+  document.querySelectorAll('.reveal').forEach(elm=>io.observe(elm));
+
+  // ---------- Contact form -> mailto ----------
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const org = document.getElementById('org').value;
+    const email = document.getElementById('email').value;
+    const dataType = document.getElementById('dataType').value;
+    const material = document.getElementById('material').value;
+    const determine = document.getElementById('determine').value;
+    const question = document.getElementById('question').value;
+    const deadline = document.getElementById('deadline').value;
+    const subject = encodeURIComponent('Analysis request — ' + name);
+    const body = encodeURIComponent(
+      `Name: ${name}\nOrganisation: ${org}\nEmail: ${email}\nData type: ${dataType}\nMaterial / sample: ${material}\nWhat would you like to determine?: ${determine}\nExpected deadline: ${deadline}\n\nScientific question:\n${question}`
+    );
+    window.location.href = `mailto:info@analisa-data.com?subject=${subject}&body=${body}`;
+  });
+})();
+</script>
+</body>
+</html>
