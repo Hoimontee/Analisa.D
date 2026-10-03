@@ -1,0 +1,587 @@
+<!--
+  ============================================================
+  EDITING GUIDE — read this before making changes
+  ============================================================
+  This is a plain HTML file: no build step, no compiler.
+  Edit it directly in cPanel File Manager's built-in editor,
+  or in any text editor, then re-upload/save.
+
+  SAFE TO EDIT YOURSELF:
+    - Any visible text (search for the words you see on the
+      site — headlines, paragraphs, card copy, stats, email).
+    - Colors: see the ":root { ... }" block near the top of
+      the <style> section below. Each --name: #hexcode; line
+      is a color used sitewide — change the hex value, it
+      updates everywhere that variable is used.
+
+  ASK CLAUDE BEFORE EDITING:
+    - Anything inside the final <script> block — this is the
+      code that generates the diffraction/PDF charts from
+      data, not hand-drawn artwork.
+    - Layout/structure changes (new sections, grids, pages).
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Careers — Analisa | Analyst positions in powder diffraction &amp; total scattering</title>
+<meta name="description" content="Analisa is hiring analysts with expertise in powder diffraction, total scattering and structural modelling — full-time, part-time or freelance. Young PhDs and postdocs welcome.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* SITEWIDE COLORS — change any hex value below, it updates everywhere that variable is used */
+  :root{
+    --bg: #1A1B1D;
+    --bg-panel: #222325;
+    --bg-panel-2: #28292C;
+    --accent: #D2954A;
+    --blue: #7B9BB8;
+    --rose: #C17568;
+    --text: #F5F4F1;
+    --text-dim: #AEADA9;
+    --text-faint: #777673;
+    --line: rgba(245,244,241,0.10);
+    --line-strong: rgba(245,244,241,0.20);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --wrap: 1120px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap{ max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+
+  h1,h2,h3{ font-family: var(--font-display); font-weight: 500; margin: 0; color: var(--text); }
+
+  /* ---------- Top ticker ---------- */
+  .ticker{
+    border-bottom: 1px solid var(--line);
+    background: #141516;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    padding: 7px 0;
+  }
+  .ticker span{ padding: 0 28px; }
+  .ticker .dot{ color: var(--accent); }
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(26,27,29,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 28px;
+  }
+  .logo{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-decoration:none;
+    color: var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .mark{ color: var(--accent); }
+  .logo-lockup{ display:inline-flex; align-items:flex-end; }
+  .peak-mark{ width: 26px; height: 22px; display:block; margin-right: -2px; }
+  .logo-word{ font-family: var(--font-mono); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 2px; line-height: 1; }
+  .logo-suffix{ font-family: var(--font-mono); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; color: var(--text); border-bottom: 2px solid transparent; padding-bottom: 2px; line-height: 1; }
+  .logo .sub{ color: var(--text-dim); font-weight: 400; font-size: 11px; display:none; }
+  @media (min-width: 1200px){ .logo .sub{ display:inline; } }
+
+  nav.links{ display:none; gap: 28px; font-size: 14px; }
+  nav.links a{ white-space: nowrap; }
+  @media (max-width: 1100px){ nav.links{ gap: 20px; } }
+  nav.links a{ text-decoration:none; color: var(--text-dim); transition: color .15s; }
+  nav.links a:hover{ color: var(--text); }
+  @media (min-width: 900px){ nav.links{ display:flex; } }
+
+  .btn{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    padding: 10px 18px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: inline-block;
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .btn.primary{ background: var(--accent); color: #1A1B1D; border-color: var(--accent); font-weight: 600; }
+  .btn.primary:hover{ background: #E5A85C; }
+  .btn.ghost:hover{ border-color: var(--text-dim); color: var(--text); background: var(--bg-panel); }
+
+  /* ---------- Hero ---------- */
+  .hero{ position: relative; padding: 84px 0 60px; overflow: hidden; }
+  .hero-content{ position: relative; max-width: 700px; }
+  .hero h1{ font-size: clamp(32px, 4.6vw, 48px); line-height: 1.1; letter-spacing: -0.01em; }
+  .hero p.lede{ color: var(--text-dim); font-size: 16.5px; margin: 18px 0 0; max-width: 560px; }
+  .hero-ctas{ display:flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+  .capabilities{ display:grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 32px; max-width: 560px; }
+  @media (min-width: 640px){ .capabilities{ grid-template-columns: repeat(4,1fr); } }
+  .capability{ border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; }
+  .capability b{ display:block; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); margin-bottom: 4px; }
+  .capability span{ display:block; font-size: 12px; color: var(--text-faint); }
+  .carousel-caption{ font-family: var(--font-mono); font-size: 12.5px; color: var(--text-faint); margin: 0 0 14px; max-width: 640px; }
+
+  /* ---------- Slide carousel ---------- */
+  .carousel-wrap{ position: relative; margin-top: 40px; }
+  .carousel{
+    display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+    border-radius: 8px; border: 1px solid var(--line); background: var(--bg-panel);
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .carousel::-webkit-scrollbar{ display:none; }
+  .slide{
+    flex: 0 0 100%; scroll-snap-align: start; padding: 30px 36px; min-height: 260px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .slide + .slide{ border-left: 1px solid var(--line); }
+  .slide-eyebrow{ font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .slide h3{ font-family: var(--font-body); font-weight: 700; font-size: 21px; margin-bottom: 10px; }
+  .slide p{ color: var(--text-dim); font-size: 14.5px; max-width: 460px; margin: 0; }
+  .slide-inner{ display:flex; align-items:center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .slide-text{ flex: 1 1 240px; }
+  .slide-visual{ flex: 0 1 380px; max-width: 380px; min-width: 0; }
+  .slide-visual svg{ display:block; width:100%; height:auto; }
+  .slide-visual svg#slideSpots{ max-width: 220px; margin: 0 auto; }
+  .slide.intro-slide, .slide.cta-slide{ align-items:center; text-align:center; }
+  .slide.intro-slide h3, .slide.cta-slide h3{ font-size: 26px; max-width: 520px; }
+  .slide.intro-slide p, .slide.cta-slide p{ margin: 0 auto; }
+  .slide.cta-slide .btn{ margin-top: 20px; }
+
+  .carousel-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:38px; height:38px; border-radius:50%;
+    background: var(--bg-panel); border: 1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5;
+    color: var(--text); font-family: var(--font-mono);
+  }
+  .carousel-arrow:hover{ border-color: var(--accent); color: var(--accent); }
+  .carousel-arrow.prev{ left:-19px; }
+  .carousel-arrow.next{ right:-19px; }
+  @media (max-width: 760px){ .carousel-arrow{ display:none; } }
+
+  .carousel-dots{ display:flex; justify-content:center; gap: 8px; margin-top: 16px; }
+  .carousel-dot{ width:7px; height:7px; border-radius:50%; background: var(--line-strong); border:none; cursor:pointer; padding:0; transition: background .15s, transform .15s; }
+  .carousel-dot.active{ background: var(--accent); transform: scale(1.35); }
+
+  /* ---------- Sections generic ---------- */
+  section{ padding: 88px 0; border-top: 1px solid var(--line); }
+  section .head{ max-width: 620px; margin-bottom: 48px; }
+  section h2{ font-size: clamp(26px, 3.4vw, 34px); letter-spacing: -0.01em; }
+  section .head p{ color: var(--text-dim); margin-top: 14px; font-size: 15.5px; }
+
+  /* ---------- Method ---------- */
+  .stages{ display:grid; grid-template-columns: 1fr; gap: 0; }
+  .stage{ display:grid; grid-template-columns: 64px 1fr; gap: 20px; padding: 26px 0; border-top: 1px solid var(--line); }
+  .stage:first-child{ border-top: 1px solid var(--line-strong); }
+  .stage-num{ font-family: var(--font-mono); color: var(--accent); font-size: 13px; padding-top: 3px; }
+  .stage h3{ font-size: 19px; font-weight: 500; margin-bottom: 8px; font-family: var(--font-body); font-weight:600; }
+  .stage p{ color: var(--text-dim); margin: 0; font-size: 15px; max-width: 620px; }
+
+  .pull-quote{ margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .pull-quote p{ font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: clamp(20px, 2.6vw, 27px); color: var(--text); max-width: 760px; margin: 0; line-height: 1.4; }
+
+  /* ---------- Data Rescue section ---------- */
+  .subhead{ font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 16px; }
+  .situation-grid{ display:grid; grid-template-columns: 1fr; gap: 10px 28px; }
+  @media (min-width: 760px){ .situation-grid{ grid-template-columns: 1fr 1fr; } }
+  .situation-grid div{ color: var(--text-dim); font-size: 14px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .situation-grid div::before{ content:'—'; position:absolute; left:0; color: var(--accent); }
+  .subcol-grid{ display:grid; grid-template-columns: 1fr; gap: 28px; }
+  @media (min-width: 640px){ .subcol-grid{ grid-template-columns: 1fr 1fr; } }
+  .subcol-grid b{ display:block; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); margin-bottom: 10px; letter-spacing: .03em; }
+  .subcol-grid ul{ list-style:none; margin:0; padding:0; display:grid; gap: 7px; }
+  .subcol-grid li{ color: var(--text-dim); font-size: 13.5px; padding-left: 14px; position: relative; }
+  .subcol-grid li::before{ content:'·'; position:absolute; left:0; color: var(--text-faint); }
+
+  /* ---------- Outputs ---------- */
+  .outputs{ display:grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 900px){ .outputs{ grid-template-columns: 1fr 1fr; } }
+  .output-card{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: 6px; padding: 22px; }
+  .output-card h3{ font-family: var(--font-body); font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+  .output-card .sub{ color: var(--text-faint); font-size: 12.5px; font-family: var(--font-mono); margin-bottom: 16px; }
+  .output-card svg{ display:block; width:100%; height:auto; }
+  .stats{
+    margin-top: 16px; display:grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+    font-family: var(--font-mono); font-size: 12px; border-top: 1px solid var(--line); padding-top: 14px;
+  }
+  .stats div span{ display:block; color: var(--text-faint); font-size: 10.5px; margin-bottom: 3px; letter-spacing: .04em; }
+  .stats div b{ color: var(--text); font-weight: 500; font-size: 14px; }
+  .legend{ display:flex; gap:16px; flex-wrap:wrap; font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-top: 10px; }
+  .legend i{ display:inline-block; width:10px; height:2px; margin-right:6px; vertical-align: middle; }
+
+  /* ---------- Applications ---------- */
+  .app-grid{ display:grid; grid-template-columns: 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow:hidden; }
+  @media (min-width: 720px){ .app-grid{ grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1020px){ .app-grid-6{ grid-template-columns: 1fr 1fr 1fr; } }
+  .app-card{ background: var(--bg-panel); padding: 28px; }
+  .app-card .tag{ font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: .05em; margin-bottom: 10px; text-transform: uppercase;}
+  .app-card h3{ font-family: var(--font-body); font-weight: 600; font-size: 17px; margin-bottom: 10px; }
+  .app-card p{ color: var(--text-dim); font-size: 14.5px; margin:0; }
+
+  /* ---------- Services (technical) ---------- */
+  .service-grid{ display:grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 900px){ .service-grid{ grid-template-columns: repeat(3,1fr); } }
+  .service-detail{ border: 1px solid var(--line); border-radius: 6px; padding: 26px; transition: border-color .15s; }
+  .service-detail:hover{ border-color: var(--line-strong); }
+  .service-detail h3{ font-family: var(--font-body); font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+  .service-detail > p{ color: var(--text-dim); font-size: 14px; margin: 0 0 16px; }
+  .service-detail ul{ list-style:none; margin:0; padding:0; display:grid; gap: 8px; }
+  .service-detail li{ color: var(--text-dim); font-size: 13.5px; padding-left: 16px; position: relative; }
+  .service-detail li::before{ content:'—'; position:absolute; left:0; color: var(--accent); }
+
+  .tier-note{ margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .tiers{ display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 18px; }
+  @media (min-width: 720px){ .tiers{ grid-template-columns: repeat(3,1fr); } }
+  .tier{ border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+  .tier b{ display:block; font-family: var(--font-mono); font-size: 13px; color: var(--accent); margin-bottom: 4px; }
+  .tier span{ display:block; font-size: 13px; color: var(--text-dim); }
+  .tier-note > p{ font-size: 14.5px; color: var(--text-dim); margin:0; }
+  .tier-note > p a{ color: var(--accent); text-decoration: underline; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 900px){ .about-grid{ grid-template-columns: 1.1fr 0.9fr; } }
+  .about-grid p{ color: var(--text-dim); font-size: 15px; }
+  .chip-list{ display:flex; flex-wrap:wrap; gap: 8px; }
+  .chip{ font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); border: 1px solid var(--line-strong); border-radius: 20px; padding: 6px 13px; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 900px){ .contact-grid{ grid-template-columns: 0.9fr 1.1fr; } }
+  .contact-info p{ color: var(--text-dim); font-size: 15px; }
+  .contact-info .email{ font-family: var(--font-mono); color: var(--accent); text-decoration:none; font-size: 15px; }
+  .contact-info .email:hover{ text-decoration: underline; }
+  form{ display:grid; gap: 16px; }
+  .field{ display:grid; gap: 6px; }
+  label{ font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); letter-spacing: .04em; text-transform: uppercase; }
+  input, textarea, select{
+    background: var(--bg-panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 11px 12px;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14.5px;
+  }
+  input:focus, textarea:focus, select:focus{ border-color: var(--accent); }
+  textarea{ resize: vertical; min-height: 110px; }
+  .form-note{ font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); margin-top: -4px; }
+  .form-status{ font-size: 13.5px; margin: 0; min-height: 1em; }
+  .form-status.success{ color: #7FBF7F; }
+  .form-status.error{ color: var(--rose); }
+
+  /* ---------- Footer ---------- */
+  footer{ border-top: 1px solid var(--line); padding: 32px 0; }
+  .foot-inner{ display:flex; justify-content: space-between; align-items:center; flex-wrap: wrap; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{ opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+</style>
+<style>
+  /* ---------- Careers page additions ---------- */
+  .role-head{ max-width: 720px; }
+  .apply-note{ font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim); margin-top: 22px; }
+  .req-block{ margin-top: 44px; }
+  .tools-note{ color: var(--text-dim); font-size: 14px; margin: 18px 0 0; }
+  nav.links a.active{ color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="ticker" aria-hidden="true">
+  <span><span class="dot">●</span> NOW HIRING · ANALYSTS</span>
+  <span><span class="dot">●</span> POWDER DIFFRACTION</span>
+  <span><span class="dot">●</span> TOTAL SCATTERING</span>
+  <span><span class="dot">●</span> PDF</span>
+  <span><span class="dot">●</span> STRUCTURAL MODELLING</span>
+  <span><span class="dot">●</span> NOW HIRING · ANALYSTS</span>
+  <span><span class="dot">●</span> POWDER DIFFRACTION</span>
+  <span><span class="dot">●</span> TOTAL SCATTERING</span>
+</div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-lockup"><svg class="peak-mark" viewBox="0 0 30 26" aria-hidden="true"><path d="M2,24 C8,24 12,5 15,2 C18,5 22,24 28,24" fill="none" stroke="var(--accent)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">nalisa</span><span class="logo-suffix">.D</span></span><span class="sub">// structural analysis for complex materials</span>
+    </a>
+    <nav class="links">
+      <a href="science.html">Science</a>
+      <a href="index.html#data-rescue">Data Rescue</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#applications">Applications</a>
+      <a href="index.html#approach">Approach</a>
+      <a href="index.html#about">About</a>
+      <a href="careers.html" class="active">Careers</a>
+    </nav>
+    <a class="btn primary" href="index.html#contact">Request an Analysis</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero" style="border-top:none; padding-top: 84px;">
+    <div class="wrap">
+      <div class="hero-content">
+        <p class="eyebrow">CAREERS · NOW HIRING</p>
+        <h1>Structural analysts wanted.</h1>
+        <p class="lede">We're looking for scientists with hands-on experience in powder diffraction, total scattering and structural modelling. Young PhDs and postdocs are especially welcome — full-time, part-time or freelance.</p>
+        <div class="hero-ctas">
+          <a class="btn primary" href="#apply">Apply now</a>
+          <a class="btn ghost" href="#role">See the role</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="role">
+    <div class="wrap">
+      <div class="head role-head reveal">
+        <p class="eyebrow">Open position</p>
+        <h2>Analyst — powder diffraction &amp; total scattering</h2>
+        <p>Work on real datasets from researchers and R&amp;D teams: from routine phase analysis and Rietveld refinement to PDF analysis, Data Rescue re-analysis and advanced structural modelling. Choose the way of working that fits your situation.</p>
+      </div>
+
+      <div class="service-grid reveal">
+        <div class="service-detail">
+          <h3>Full-time</h3>
+          <p>A core analysis role across client projects and Data Rescue work.</p>
+          <ul>
+            <li>Take projects from dataset to final report</li>
+            <li>Work across PXRD, total scattering and PDF</li>
+            <li>Help develop methods and workflows</li>
+          </ul>
+        </div>
+        <div class="service-detail">
+          <h3>Part-time</h3>
+          <p>Ideal alongside a postdoc, fellowship or other research commitments.</p>
+          <ul>
+            <li>A defined weekly or monthly time commitment</li>
+            <li>Projects matched to your expertise and availability</li>
+            <li>The same standards, on a flexible schedule</li>
+          </ul>
+        </div>
+        <div class="service-detail">
+          <h3>Freelance</h3>
+          <p>Project-based collaboration on specific datasets or methods.</p>
+          <ul>
+            <li>Engagements scoped per project</li>
+            <li>Suited to specialist expertise, e.g. RMC, big-box or DFT-informed modelling</li>
+            <li>Independent work with clear deliverables</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="req-block reveal">
+        <p class="subhead">What you would work on</p>
+        <div class="situation-grid">
+          <div>Phase identification and quantitative phase analysis</div>
+          <div>Rietveld refinement of powder diffraction data</div>
+          <div>Total-scattering data reduction and PDF analysis</div>
+          <div>Re-analysis of previously collected datasets (Data Rescue)</div>
+          <div>Structural modelling — real-space refinement, RMC / big-box, DFT-informed interpretation</div>
+          <div>Clear technical reports and publication-quality figures</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="who">
+    <div class="wrap">
+      <div class="about-grid reveal">
+        <div>
+          <p class="eyebrow">Who we're looking for</p>
+          <h2>Early-career scientists are welcome.</h2>
+          <p>We would like to hear from young PhDs and postdocs in materials science, solid-state chemistry, physics, mineralogy or related fields who enjoy getting the most out of diffraction and scattering data. Depth in one or two of the areas on the right matters more than covering everything.</p>
+          <div class="req-block" style="margin-top:32px;">
+            <p class="subhead">What we ask for</p>
+            <div class="situation-grid" style="grid-template-columns:1fr;">
+              <div>A PhD (completed or close to completion) or postdoctoral experience in a relevant field</div>
+              <div>Hands-on experience analysing diffraction or scattering data</div>
+              <div>Careful, reproducible working habits and clear scientific writing</div>
+              <div>Comfort handling confidential client data</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="eyebrow">Expertise we value</p>
+          <div class="chip-list">
+            <span class="chip">Powder XRD</span>
+            <span class="chip">Rietveld refinement</span>
+            <span class="chip">Synchrotron &amp; neutron data</span>
+            <span class="chip">Total scattering</span>
+            <span class="chip">PDF analysis</span>
+            <span class="chip">RMC / big-box modelling</span>
+            <span class="chip">DFT</span>
+            <span class="chip">Complex oxides</span>
+            <span class="chip">Ferroelectric materials</span>
+            <span class="chip">Energy materials</span>
+            <span class="chip">Nanomaterials</span>
+            <span class="chip">Python scripting</span>
+          </div>
+          <p class="tools-note">Familiarity with tools such as TOPAS, GSAS-II, FullProf, PDFgui, DiffPy-CMI or RMCProfile is a plus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apply">
+    <div class="wrap">
+      <div class="contact-grid reveal">
+        <div class="contact-info">
+          <p class="eyebrow">Apply</p>
+          <h2>Tell us about yourself</h2>
+          <p>Send a short introduction: your background, your areas of expertise, and how you would like to work with us. No formal cover letter needed.</p>
+          <p>Prefer email directly?<br><a class="email" href="mailto:info@analisa-data.com?subject=Application">info@analisa-data.com</a></p>
+        </div>
+        <form id="careersForm">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+          <div class="field">
+            <label for="position">Current position</label>
+            <select id="position" name="position">
+              <option>PhD student (final year)</option>
+              <option>PhD (completed)</option>
+              <option>Postdoc</option>
+              <option>Other researcher / professional</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="engagement">Type of engagement</label>
+            <select id="engagement" name="engagement">
+              <option>Full-time</option>
+              <option>Part-time</option>
+              <option>Freelance</option>
+              <option>Open to any</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="expertise">Areas of expertise</label>
+            <textarea id="expertise" name="expertise" required placeholder="e.g. Rietveld refinement of oxides, PDF of nanomaterials, RMC modelling, synchrotron data reduction…"></textarea>
+          </div>
+          <div class="field">
+            <label for="availability">Availability</label>
+            <input id="availability" name="availability" type="text" placeholder="e.g. from January, 2 days a week">
+          </div>
+          <div class="field">
+            <label for="profile">Link to CV / profile / publications</label>
+            <input id="profile" name="profile" type="text" placeholder="URL — or attach your CV in the email that opens">
+          </div>
+          <div class="field">
+            <label for="notes">Anything else you would like us to know</label>
+            <textarea id="notes" name="notes" style="min-height:80px;"></textarea>
+          </div>
+          <p class="form-note">We don't yet support CV attachments here — please include a link to your CV, profile or publications above, or email it directly to info@analisa-data.com.</p>
+          <p class="form-status" id="careersStatus" role="status" aria-live="polite"></p>
+          <button class="btn primary" type="submit" id="careersSubmit" style="justify-self:start;">Send application</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>ANALISA — advanced structural analysis for complex materials</span>
+    <span><a href="index.html" style="color:inherit;">Home</a> · <a href="science.html" style="color:inherit;">The science</a> · © 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold: 0.12});
+  document.querySelectorAll('.reveal').forEach(elm=>io.observe(elm));
+
+  // Application form -> mailto
+  const form = document.getElementById('careersForm');
+  const statusEl = document.getElementById('careersStatus');
+  const submitBtn = document.getElementById('careersSubmit');
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const v = id => document.getElementById(id).value;
+    const payload = {
+      name: v('name'), email: v('email'), position: v('position'),
+      engagement: v('engagement'), availability: v('availability'),
+      profile: v('profile'), expertise: v('expertise'), notes: v('notes')
+    };
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    statusEl.textContent = '';
+    statusEl.className = 'form-status';
+    try {
+      const res = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if (result.ok) {
+        form.reset();
+        statusEl.textContent = 'Thanks — your application has been sent. We\'ll be in touch soon.';
+        statusEl.classList.add('success');
+      } else {
+        statusEl.textContent = result.error || 'Something went wrong. Please email us directly at info@analisa-data.com.';
+        statusEl.classList.add('error');
+      }
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server. Please email us directly at info@analisa-data.com.';
+      statusEl.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send application';
+    }
+  });
+})();
+</script>
+</body>
+</html>
