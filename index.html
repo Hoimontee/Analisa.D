@@ -27,6 +27,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analisa — Advanced Powder Diffraction &amp; PDF Analysis</title>
+<link rel="canonical" href="https://analisa-data.com/">
 <meta name="description" content="Expert powder diffraction, total scattering, Pair Distribution Function (PDF) analysis and structural modelling for complex materials.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -151,8 +152,37 @@
 
   /* ---------- Hero ---------- */
   .hero{ position: relative; padding: 84px 0 60px; overflow: hidden; }
-  .hero-content{ position: relative; max-width: 700px; }
-  .hero h1{ font-size: clamp(32px, 4.6vw, 48px); line-height: 1.1; letter-spacing: -0.01em; }
+  .hero-content{ position: relative; z-index: 1; max-width: 700px; }
+
+  /* Hero photo (lab bench, diffractometer, beam, monitor with plots + crystal structure) */
+  .hero-stage{ position: relative; margin-top: -84px; padding-top: 84px; padding-bottom: 64px; }
+  @media (min-width: 1180px){ .hero-stage{ min-height: clamp(560px, 38vw, 740px); display: flex; align-items: center; } .hero-stage > .wrap{ width: 100%; } }
+  .hero-art{
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: min(54vw, 1040px);
+    pointer-events: none; z-index: 0;
+    /* photo fades into the page on its left, top and bottom edges */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.55) 18%, #000 38%),
+                        linear-gradient(to bottom, transparent 0%, #000 11%, #000 88%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.55) 18%, #000 38%),
+                linear-gradient(to bottom, transparent 0%, #000 11%, #000 88%, transparent 100%);
+    mask-composite: intersect;
+  }
+  .hero-art img{ display:block; width: 100%; height: 100%; object-fit: cover; object-position: 55% 64%; }
+  @media (max-width: 1179px){
+    .hero-art{ left: auto; width: min(50vw, 500px); opacity: .74;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 6%, #000 58%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-image: linear-gradient(to right, transparent 0%, transparent 6%, #000 58%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%);
+      mask-composite: intersect; }
+    .hero-art img{ object-position: 88% 45%; }
+  }
+  @media (max-width: 640px){
+    .hero-art{ left: 0; width: 100%; opacity: .22; }
+    .hero-art img{ object-position: 75% 45%; }
+  }
+  .hero h1{ font-size: clamp(32px, 4.6vw, 48px); line-height: 1.1; letter-spacing: -0.01em; max-width: 600px; }
   .hero p.lede{ color: var(--text-dim); font-size: 16.5px; margin: 18px 0 0; max-width: 560px; }
   .hero-ctas{ display:flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
   .capabilities{ display:grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 32px; max-width: 560px; }
@@ -321,6 +351,7 @@
   .form-status{ font-size: 13.5px; margin: 0; min-height: 1em; }
   .form-status.success{ color: #7FBF7F; }
   .form-status.error{ color: var(--rose); }
+  .hp{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   /* ---------- Footer ---------- */
   footer{ border-top: 1px solid var(--line); padding: 32px 0; }
@@ -352,7 +383,9 @@
 
 <main id="top">
   <section class="hero" style="border-top:none; padding-top: 84px;">
-    <div class="wrap">
+    <div class="hero-stage">
+      <div class="hero-art" aria-hidden="true"><picture><source media="(max-width: 1179px)" srcset="hero-lab-narrow.webp"><img src="hero-lab.webp" alt="" width="946" height="823" decoding="async" fetchpriority="high"></picture></div>
+      <div class="wrap">
       <div class="hero-content">
         <p class="eyebrow">POWDER DIFFRACTION · TOTAL SCATTERING · PDF ANALYSIS · STRUCTURAL MODELLING</p>
         <h1>Advanced structural analysis for complex materials.</h1>
@@ -368,7 +401,10 @@
           <div class="capability"><b>DFT</b><span>Atomistic interpretation</span></div>
         </div>
       </div>
+      </div>
+    </div>
 
+    <div class="wrap">
       <div class="carousel-wrap reveal">
         <p class="carousel-caption">Scroll through a few cases to see how the same kind of measurement plays out differently depending on what you're studying.</p>
         <button class="carousel-arrow prev" id="carPrev" aria-label="Previous slide">←</button>
@@ -812,6 +848,7 @@
             <input id="deadline" name="deadline" type="text" placeholder="e.g. 4 weeks, or a specific date">
           </div>
           <p class="form-note">Dataset upload will be handled separately via secure file transfer — no need to attach anything here.</p>
+          <div class="hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <p class="form-status" id="contactStatus" role="status" aria-live="polite"></p>
           <button class="btn primary" type="submit" id="contactSubmit" style="justify-self:start;">Request an Analysis</button>
         </form>
@@ -1105,7 +1142,8 @@
       material: document.getElementById('material').value,
       determine: document.getElementById('determine').value,
       question: document.getElementById('question').value,
-      deadline: document.getElementById('deadline').value
+      deadline: document.getElementById('deadline').value,
+      website: document.getElementById('website').value
     };
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';

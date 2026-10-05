@@ -1,0 +1,13 @@
+.assetsignore
+wrangler.jsonc
+worker.js
+contact.js
+apply.js
+functions/
+.git/
+.github/
+.wrangler/
+node_modules/
+package.json
+package-lock.json
+README.md

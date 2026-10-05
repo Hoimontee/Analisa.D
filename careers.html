@@ -310,6 +310,7 @@
   .form-status{ font-size: 13.5px; margin: 0; min-height: 1em; }
   .form-status.success{ color: #7FBF7F; }
   .form-status.error{ color: var(--rose); }
+  .hp{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   /* ---------- Footer ---------- */
   footer{ border-top: 1px solid var(--line); padding: 32px 0; }
@@ -519,6 +520,7 @@
             <textarea id="notes" name="notes" style="min-height:80px;"></textarea>
           </div>
           <p class="form-note">We don't yet support CV attachments here — please include a link to your CV, profile or publications above, or email it directly to info@analisa-data.com.</p>
+          <div class="hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <p class="form-status" id="careersStatus" role="status" aria-live="polite"></p>
           <button class="btn primary" type="submit" id="careersSubmit" style="justify-self:start;">Send application</button>
         </form>
@@ -552,7 +554,7 @@
     const payload = {
       name: v('name'), email: v('email'), position: v('position'),
       engagement: v('engagement'), availability: v('availability'),
-      profile: v('profile'), expertise: v('expertise'), notes: v('notes')
+      profile: v('profile'), expertise: v('expertise'), notes: v('notes'), website: v('website')
     };
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
