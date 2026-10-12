@@ -26,11 +26,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#1A1B1D">
+<script>
+/* applies the saved theme before the page paints, so there is no flash. Dark is the default. */
+(function(){var r=document.documentElement;r.classList.add('js');var t='dark';try{var s=localStorage.getItem('theme');if(s==='light'||s==='dark'){t=s;}}catch(e){}r.setAttribute('data-theme',t);})();
+</script>
 <title>Careers — Analisa | Analyst positions in powder diffraction &amp; total scattering</title>
 <meta name="description" content="Analisa is hiring analysts with expertise in powder diffraction, total scattering and structural modelling — full-time, part-time or freelance. Young PhDs and postdocs welcome.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fraunces-v38-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css">
 <style>
   /* SITEWIDE COLORS — change any hex value below, it updates everywhere that variable is used */
   :root{
@@ -49,6 +55,21 @@
     --font-body: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --wrap: 1120px;
+  }
+  /* ---------- Theme: dark is the default; visitors can switch to light (saved in their browser) ---------- */
+  :root{
+    --accent-hover: #E5A85C; --on-accent: #1A1B1D; --ok: #7FBF7F;
+    --nav-bg: rgba(26,27,29,0.86); --ticker-bg: #141516;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"]{
+    color-scheme: light;
+    --bg: #F6F4EF; --bg-panel: #FFFFFF; --bg-panel-2: #ECE9E1;
+    --text: #1D2126; --heading: #12151A; --text-dim: #4C525B; --text-faint: #666C75;
+    --line: rgba(20,23,27,0.12); --line-strong: rgba(20,23,27,0.24);
+    --accent: #9A5B10; --accent-hover: #85500D; --on-accent: #FFFFFF;
+    --blue: #3A6A96; --rose: #A04437; --ok: #2E7D3B;
+    --nav-bg: rgba(246,244,239,0.88); --ticker-bg: #ECE9E1;
   }
 
   *{ box-sizing: border-box; }
@@ -87,7 +108,7 @@
   /* ---------- Top ticker ---------- */
   .ticker{
     border-bottom: 1px solid var(--line);
-    background: #141516;
+    background: var(--ticker-bg);
     overflow: hidden;
     white-space: nowrap;
     font-family: var(--font-mono);
@@ -101,7 +122,7 @@
   /* ---------- Nav ---------- */
   header.nav{
     position: sticky; top: 0; z-index: 50;
-    background: rgba(26,27,29,0.86);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
   }
@@ -145,8 +166,8 @@
     color: var(--text);
     transition: border-color .15s, color .15s, background .15s;
   }
-  .btn.primary{ background: var(--accent); color: #1A1B1D; border-color: var(--accent); font-weight: 600; }
-  .btn.primary:hover{ background: #E5A85C; }
+  .btn.primary{ background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+  .btn.primary:hover{ background: var(--accent-hover); }
   .btn.ghost:hover{ border-color: var(--text-dim); color: var(--text); background: var(--bg-panel); }
 
   /* ---------- Hero ---------- */
@@ -308,7 +329,7 @@
   textarea{ resize: vertical; min-height: 110px; }
   .form-note{ font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); margin-top: -4px; }
   .form-status{ font-size: 13.5px; margin: 0; min-height: 1em; }
-  .form-status.success{ color: #7FBF7F; }
+  .form-status.success{ color: var(--ok); }
   .form-status.error{ color: var(--rose); }
   .hp{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
@@ -319,6 +340,17 @@
   /* ---------- Reveal on scroll ---------- */
   .reveal{ opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity: 1; transform: translateY(0); }
+
+  /* ---------- Theme toggle ---------- */
+  .nav-actions{ display:flex; align-items:center; gap: 12px; }
+  .theme-toggle{ display:none; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-strong); background: transparent; color: var(--text-dim); cursor: pointer; align-items:center; justify-content:center; padding: 0; transition: color .15s, border-color .15s; }
+  html.js .theme-toggle{ display:inline-flex; }
+  .theme-toggle:hover{ color: var(--accent); border-color: var(--accent); }
+  .theme-toggle svg{ width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  html[data-theme="dark"] .theme-toggle .ico-moon, html[data-theme="light"] .theme-toggle .ico-sun{ display:none; }
+  html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after{ transition: background-color .3s ease, color .3s ease, border-color .3s ease, fill .3s ease, stroke .3s ease !important; }
+  @media (prefers-reduced-motion: reduce){ html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after{ transition: none !important; } }
+  @media (max-width: 480px){ .nav-inner{ padding: 14px 16px; } .nav-actions{ gap: 8px; } .nav-actions .btn{ padding: 9px 12px; font-size: 12px; } }
 </style>
 <style>
   /* ---------- Careers page additions ---------- */
@@ -356,7 +388,13 @@
       <a href="index.html#about">About</a>
       <a href="careers.html" class="active">Careers</a>
     </nav>
-    <a class="btn primary" href="index.html#contact">Request an Analysis</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.4 5.4l1.7 1.7M16.9 16.9l1.7 1.7M5.4 18.6l1.7-1.7M16.9 7.1l1.7-1.7"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.3A8.6 8.6 0 0 1 9.7 3.6a8.6 8.6 0 1 0 10.7 10.7z"/></svg>
+      </button>
+      <a class="btn primary" href="index.html#contact">Request an Analysis</a>
+    </div>
   </div>
 </header>
 
@@ -582,6 +620,28 @@
       submitBtn.disabled = false;
       submitBtn.textContent = 'Send application';
     }
+  });
+})();
+</script>
+<script>
+(function(){
+  var root = document.documentElement, btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  function paint(t){
+    root.setAttribute('data-theme', t);
+    var next = (t === 'light') ? 'dark' : 'light';
+    btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+    btn.setAttribute('title', 'Switch to ' + next + ' theme');
+    if (meta) meta.setAttribute('content', t === 'light' ? '#F6F4EF' : '#1A1B1D');
+  }
+  paint(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  btn.addEventListener('click', function(){
+    var t = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.classList.add('theme-anim');
+    paint(t);
+    try { localStorage.setItem('theme', t); } catch(e) {}
+    setTimeout(function(){ root.classList.remove('theme-anim'); }, 400);
   });
 })();
 </script>

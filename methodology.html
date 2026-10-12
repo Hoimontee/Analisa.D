@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#1A1B1D">
+<script>
+/* applies the saved theme before the page paints, so there is no flash. Dark is the default. */
+(function(){var r=document.documentElement;r.classList.add('js');var t='dark';try{var s=localStorage.getItem('theme');if(s==='light'||s==='dark'){t=s;}}catch(e){}r.setAttribute('data-theme',t);})();
+</script>
+<title>Methodology — How we analyse diffraction and PDF data | Analisa.D</title>
+<link rel="canonical" href="https://analisa-data.com/methodology">
+<meta name="description" content="Our approach to powder diffraction, total scattering and PDF analysis: defining the question, choosing the method, validated and reproducible modelling, and clear reporting.">
+<link rel="preload" href="fonts/inter-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fraunces-v38-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="extras.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-lockup"><svg class="peak-mark" viewBox="0 0 30 26" aria-hidden="true"><path d="M2,24 C8,24 12,5 15,2 C18,5 22,24 28,24" fill="none" stroke="var(--accent)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">nalisa</span><span class="logo-suffix">.D</span></span><span class="sub">// structural analysis for complex materials</span></a>
+    <nav class="links" id="siteNav" aria-label="Main"><a href="services.html">Services</a><a href="data-rescue.html">Data Rescue</a><a href="applications.html">Applications</a><a href="methodology.html" aria-current="page">Methodology</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.4 5.4l1.7 1.7M16.9 16.9l1.7 1.7M5.4 18.6l1.7-1.7M16.9 7.1l1.7-1.7"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.3A8.6 8.6 0 0 1 9.7 3.6a8.6 8.6 0 1 0 10.7 10.7z"/></svg>
+      </button>
+      <a class="btn primary" href="contact.html">Request an analysis</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">
+        <svg class="ico-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="ico-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html">Home</a> / Methodology</p>
+      <h1>The goal is to answer the scientific question — not merely to fit peaks</h1>
+      <p class="lede">Many materials contain disorder, nanoscale effects and local distortions that stay hidden in an average crystallographic model. We combine reciprocal-space and real-space methods to investigate materials across length scales, and we report what the data can and cannot support.</p>
+      <div class="hero-ctas"><a class="btn primary" href="contact.html">Request an analysis</a><a class="btn ghost" href="science.html">Read the science</a></div>
+    </div>
+  </section>  <section id="steps">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">Four steps</p>
+        <h2>How an analysis is approached</h2>
+        
+      </div>
+      <div class="stages reveal"><div class="stage"><div class="stage-num">01</div><div><h3>Define the question</h3><p>What structural information do you need — and what decision will it inform?</p></div></div><div class="stage"><div class="stage-num">02</div><div><h3>Choose the method</h3><p>PXRD, total scattering, PDF or advanced modelling, depending on the length scale of interest.</p></div></div><div class="stage"><div class="stage-num">03</div><div><h3>Analyse &amp; model</h3><p>Reproducible processing, refinement and interpretation.</p></div></div><div class="stage"><div class="stage-num">04</div><div><h3>Deliver insight</h3><p>Results, figures and a clear scientific explanation, including limitations.</p></div></div></div>
+    </div>
+  </section>
+  <section id="quality">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">Quality</p>
+        <h2>Validation, uncertainty and reproducibility</h2>
+        
+      </div>
+      <div class="grid-2 reveal">
+        <div class="card"><h3>Validation</h3><p>Data are checked before they are modelled — normalisation, corrections and instrument resolution — and fits are judged by residuals and physical plausibility, not by a single agreement factor.</p></div>
+        <div class="card"><h3>Uncertainty</h3><p>Refined values are reported with their uncertainties, and we state which parameters are well determined by the data and which are not.</p></div>
+        <div class="card"><h3>Competing models</h3><p>Where more than one structural picture is possible, alternatives are compared against the same data rather than a single model being assumed.</p></div>
+        <div class="card"><h3>Reproducibility</h3><p>Processing steps, models and key parameters are documented so that the analysis can be repeated, checked and extended — by you or by us.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="facilities">
+    <div class="wrap">
+      <div class="head reveal">
+        <p class="eyebrow">Experience</p>
+        <h2>Instruments and facilities</h2>
+        
+      </div>
+      <div class="reveal" style="max-width:720px;"><p style="color:var(--text-dim);font-size:15px;margin-top:0;">We work with data from synchrotron and neutron facilities and from laboratory diffractometers, in the formats common to these instruments. If your data come from a specific beamline or instrument, tell us in your enquiry and we will confirm that we can handle them.</p><p class="sec-note"><a class="link-arrow" href="science.html">The science behind these methods →</a> &nbsp; <a class="link-arrow" href="services.html">Services →</a></p></div>
+    </div>
+  </section>
+  <section class="cta-band">
+    <div class="wrap"><div class="box reveal">
+      <h2>Discuss your dataset</h2>
+      <p>Tell us about your material, data and scientific question. We will assess the project and propose an appropriate analysis strategy. No commitment is required at this stage.</p>
+      <div class="hero-ctas"><a class="btn primary" href="contact.html">Request an analysis</a></div>
+      <p>Prefer email directly? <a class="email" href="mailto:info@analisa-data.com">info@analisa-data.com</a></p>
+    </div></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand"><b>Analisa.D</b><p>Expert diffraction and PDF analysis for complex materials. Analysis and consulting services — not software.</p></div>
+      <div class="foot-col"><h4>Services</h4><a href="services.html">Services</a><a href="data-rescue.html">Data Rescue</a><a href="applications.html">Applications</a><a href="methodology.html">Methodology</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="about.html">About</a><a href="science.html">The science</a><a href="contact.html">Contact</a><a href="mailto:info@analisa-data.com">info@analisa-data.com</a></div>
+      <div class="foot-col"><h4>Legal</h4><a href="impressum.html">Impressum</a><a href="datenschutz.html">Privacy policy</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Analisa.D</span><span>Confidential handling of data · NDAs on request</span></div>
+  </div>
+</footer>
+<script src="site.js" defer></script>
+</body>
+</html>

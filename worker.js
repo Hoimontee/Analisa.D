@@ -23,13 +23,13 @@ const row = (label, value) => `<p><b>${label}:</b> ${esc(value)}</p>`;
 // field name -> max length
 const FORMS = {
   '/api/contact': {
-    fields: { name: 200, org: 200, email: 200, dataType: 100, material: 300, determine: 400, question: 5000, deadline: 200 },
-    required: { name: 'your name', email: 'your email', question: 'your scientific question' },
+    fields: { name: 200, org: 200, email: 200, dataType: 100, material: 300, determine: 400, question: 5000, deadline: 200, consent: 200 },
+    required: { name: 'your name', email: 'your email', question: 'your scientific question', consent: 'the consent box' },
     subject: (d) => `Analysis request — ${d.name}`,
     html: (d) => `<h2>New analysis request</h2>
       ${row('Name', d.name)}${row('Organisation', d.org)}${row('Email', d.email)}
       ${row('Data type', d.dataType)}${row('Material / sample', d.material)}
-      ${row('What would you like to determine?', d.determine)}${row('Expected deadline', d.deadline)}
+      ${row('Desired timeline', d.deadline)}${row('Consent', d.consent)}
       <p><b>Scientific question:</b><br>${multi(d.question)}</p>`
   },
   '/api/apply': {

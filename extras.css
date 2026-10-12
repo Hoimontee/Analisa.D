@@ -1,0 +1,106 @@
+/* extras.css — loaded after the main styles on every page.
+   Navigation (7 links + mobile menu), footer, inner-page headers and the components added in the restructure.
+   Colours come only from the existing theme variables. */
+
+/* ---------- Navigation ---------- */
+nav.links{ display:none; gap: 22px; font-size: 14px; }
+@media (min-width: 1180px){ nav.links{ display:flex; } }
+@media (min-width: 900px) and (max-width: 1179px){ nav.links{ display:none; } }
+nav.links a[aria-current="page"]{ color: var(--accent); }
+.nav-toggle{ display:inline-flex; width:36px; height:36px; border-radius:50%; border:1px solid var(--line-strong); background:transparent; color:var(--text-dim); cursor:pointer; align-items:center; justify-content:center; padding:0; }
+.nav-toggle:hover{ color:var(--accent); border-color:var(--accent); }
+.nav-toggle svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; }
+.nav-toggle .ico-close{ display:none; }
+header.nav.menu-open .nav-toggle .ico-open{ display:none; }
+header.nav.menu-open .nav-toggle .ico-close{ display:block; }
+@media (min-width: 1180px){ .nav-toggle{ display:none; } }
+@media (max-width: 1179px){
+  header.nav.menu-open nav.links{
+    display:flex; flex-direction:column; gap:0; position:absolute; top:100%; left:0; right:0;
+    background: var(--bg); border-bottom:1px solid var(--line-strong); padding: 8px 28px 16px; font-size:15px;
+  }
+  header.nav.menu-open nav.links a{ padding: 13px 0; border-bottom:1px solid var(--line); }
+  header.nav.menu-open nav.links a:last-child{ border-bottom:none; }
+}
+@media (max-width: 480px){ header.nav.menu-open nav.links{ padding: 8px 16px 16px; } .nav-actions .btn{ display:none; } }
+@media (min-width: 481px) and (max-width: 640px){ .nav-actions .btn{ padding: 9px 12px; font-size: 12px; } }
+
+/* ---------- Inner-page header ---------- */
+.page-head{ padding: 72px 0 56px; border-top:none; }
+.page-head h1{ font-size: clamp(30px, 4.2vw, 44px); line-height:1.12; letter-spacing:-0.01em; max-width: 760px; }
+.page-head p.lede{ color: var(--text-dim); font-size: 17px; max-width: 700px; margin: 18px 0 0; }
+.page-head .hero-ctas{ margin-top: 26px; }
+.crumbs{ font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); margin: 0 0 18px; letter-spacing:.04em; }
+.crumbs a{ text-decoration:none; color: var(--text-dim); } .crumbs a:hover{ color: var(--accent); }
+
+/* ---------- Generic helpers ---------- */
+.grid-2{ display:grid; grid-template-columns:1fr; gap:18px; } @media (min-width:800px){ .grid-2{ grid-template-columns:1fr 1fr; } }
+.grid-3{ display:grid; grid-template-columns:1fr; gap:18px; } @media (min-width:900px){ .grid-3{ grid-template-columns:repeat(3,1fr); } }
+.grid-4{ display:grid; grid-template-columns:1fr; gap:18px; } @media (min-width:700px){ .grid-4{ grid-template-columns:1fr 1fr; } } @media (min-width:1100px){ .grid-4{ grid-template-columns:repeat(4,1fr); } }
+.card{ border:1px solid var(--line); border-radius:6px; padding:26px; background: transparent; transition: border-color .15s; }
+.card:hover{ border-color: var(--line-strong); }
+.card h3{ font-family: var(--font-body); font-weight:700; font-size:17px; margin-bottom:10px; }
+.card > p{ color: var(--text-dim); font-size:14.5px; margin:0 0 14px; }
+.card > p:last-child{ margin-bottom:0; }
+.card .more{ font-family: var(--font-mono); font-size:12.5px; color: var(--accent); text-decoration:none; } .card .more:hover{ text-decoration:underline; }
+.check-list{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+.check-list li{ position:relative; padding-left:22px; color: var(--text-dim); font-size:15px; }
+.check-list li::before{ content:'—'; position:absolute; left:0; color: var(--accent); }
+.check-list li b{ color: var(--text); font-weight:600; }
+.lead-list{ max-width: 760px; }
+.link-arrow{ font-family: var(--font-mono); font-size:13px; color: var(--accent); text-decoration:none; } .link-arrow:hover{ text-decoration:underline; }
+.sec-note{ color: var(--text-faint); font-size: 13.5px; margin-top: 22px; }
+.sec-note a{ color: var(--accent); }
+.subhead{ font-family: var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color: var(--text-faint); margin:0 0 16px; }
+
+/* ---------- Application cards: question / method / outcome ---------- */
+.app-card dl{ margin:14px 0 0; display:grid; gap:9px; }
+.app-card dt{ font-family: var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color: var(--text-faint); }
+.app-card dd{ margin:2px 0 0; color: var(--text-dim); font-size:14px; }
+
+/* ---------- Package table ---------- */
+.pkg-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:6px; }
+table.pkg{ width:100%; border-collapse:collapse; min-width:760px; font-size:14px; }
+table.pkg th, table.pkg td{ text-align:left; vertical-align:top; padding:16px 18px; border-bottom:1px solid var(--line); }
+table.pkg tr:last-child td{ border-bottom:none; }
+table.pkg th{ font-family: var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color: var(--text-faint); font-weight:500; background: var(--bg-panel); }
+table.pkg td:first-child{ font-weight:600; color: var(--accent); font-family: var(--font-mono); font-size:13px; white-space:nowrap; }
+table.pkg td{ color: var(--text-dim); }
+
+/* ---------- Final CTA band ---------- */
+.cta-band{ text-align:left; }
+.cta-band .box{ border:1px solid var(--line-strong); border-radius:8px; padding: 44px 36px; background: var(--bg-panel); display:grid; gap:12px; }
+.cta-band h2{ margin:0; }
+.cta-band p{ color: var(--text-dim); margin:0; max-width:640px; }
+.cta-band .email{ font-family: var(--font-mono); color: var(--accent); text-decoration:none; } .cta-band .email:hover{ text-decoration:underline; }
+.cta-band .hero-ctas{ margin-top:10px; }
+
+/* ---------- Contact form additions ---------- */
+.field.consent{ display:flex; gap:10px; align-items:flex-start; }
+.field.consent input{ width:18px; height:18px; margin-top:3px; accent-color: var(--accent); flex:none; padding:0; }
+.field.consent label{ text-transform:none; letter-spacing:0; font-family: var(--font-body); font-size:13.5px; color: var(--text-dim); }
+.field.consent label a{ color: var(--accent); }
+.faq details{ border-top:1px solid var(--line); padding:16px 0; }
+.faq details:last-child{ border-bottom:1px solid var(--line); }
+.faq summary{ cursor:pointer; font-weight:600; font-size:15.5px; list-style:none; display:flex; justify-content:space-between; gap:16px; }
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary::after{ content:'+'; color: var(--accent); font-family: var(--font-mono); }
+.faq details[open] summary::after{ content:'–'; }
+.faq details p{ color: var(--text-dim); font-size:14.5px; margin:10px 0 0; max-width:680px; }
+
+/* ---------- Footer ---------- */
+footer{ padding: 48px 0 28px; }
+.foot-grid{ display:grid; gap:32px; grid-template-columns:1fr; }
+@media (min-width:800px){ .foot-grid{ grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+.foot-brand b{ font-family: var(--font-mono); font-size:15px; color: var(--text); }
+.foot-brand p{ color: var(--text-dim); font-size:13.5px; margin:10px 0 0; max-width:300px; }
+.foot-col h4{ font-family: var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color: var(--text-faint); font-weight:500; margin:0 0 14px; }
+.foot-col a{ display:block; text-decoration:none; color: var(--text-dim); font-size:14px; padding:4px 0; } .foot-col a:hover{ color: var(--accent); }
+.foot-bottom{ margin-top:36px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-family: var(--font-mono); font-size:12px; color: var(--text-faint); }
+
+/* ---------- Sections on inner pages: hairline between sections already comes from "section" ---------- */
+.legal-body{ max-width:760px; } .legal-body h2{ font-size:22px; margin:34px 0 10px; } .legal-body p, .legal-body li{ color: var(--text-dim); font-size:15px; }
+
+/* last application card spans the row so the grid has no empty cell */
+@media (min-width:720px) and (max-width:1019px){ .app-grid > .app-card:last-child:nth-child(odd){ grid-column:1/-1; } }
+@media (min-width:1020px){ .app-grid-6 > .app-card:last-child:nth-child(3n+1){ grid-column:1/-1; } .app-grid-6 > .app-card:last-child:nth-child(3n+1) dl{ grid-template-columns:repeat(3,1fr); gap:24px; } }
