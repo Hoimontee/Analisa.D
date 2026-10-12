@@ -1,91 +1,47 @@
-// Cloudflare Pages Function — POST /api/contact
-// Receives the "Request an Analysis" form from index.html and sends it
-// via Brevo's transactional email API, using a secret API key that never
-// touches the browser.
-
-function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-export async function onRequestPost(context) {
-  const { request, env } = context;
-
-  let data;
-  try {
-    data = await request.json();
-  } catch (e) {
-    return new Response(JSON.stringify({ ok: false, error: 'Invalid request body.' }), {
-      status: 400,
-      headers: { 'content-type': 'application/json' }
-    });
-  }
-
-  const name = (data.name || '').trim();
-  const email = (data.email || '').trim();
-  const question = (data.question || '').trim();
-
-  if (!name || !email || !question) {
-    return new Response(JSON.stringify({ ok: false, error: 'Please fill in your name, email and scientific question.' }), {
-      status: 400,
-      headers: { 'content-type': 'application/json' }
-    });
-  }
-
-  if (!env.BREVO_API_KEY) {
-    return new Response(JSON.stringify({ ok: false, error: 'Email sending is not configured yet.' }), {
-      status: 500,
-      headers: { 'content-type': 'application/json' }
-    });
-  }
-
-  const org = (data.org || '').trim();
-  const dataType = (data.dataType || '').trim();
-  const material = (data.material || '').trim();
-  const determine = (data.determine || '').trim();
-  const deadline = (data.deadline || '').trim();
-
-  const htmlContent = `
-    <h2>New analysis request</h2>
-    <p><b>Name:</b> ${escapeHtml(name)}</p>
-    <p><b>Organisation:</b> ${escapeHtml(org)}</p>
-    <p><b>Email:</b> ${escapeHtml(email)}</p>
-    <p><b>Data type:</b> ${escapeHtml(dataType)}</p>
-    <p><b>Material / sample:</b> ${escapeHtml(material)}</p>
-    <p><b>What would you like to determine?:</b> ${escapeHtml(determine)}</p>
-    <p><b>Expected deadline:</b> ${escapeHtml(deadline)}</p>
-    <p><b>Scientific question:</b><br>${escapeHtml(question).replace(/\n/g, '<br>')}</p>
-  `;
-
-  const brevoResp = await fetch('https://api.brevo.com/v3/smtp/email', {
-    method: 'POST',
-    headers: {
-      'accept': 'application/json',
-      'api-key': env.BREVO_API_KEY,
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      sender: { name: 'Analisa Website', email: 'info@analisa-data.com' },
-      to: [{ email: 'info@analisa-data.com', name: 'Analisa' }],
-      replyTo: { email, name },
-      subject: `Analysis request — ${name}`,
-      htmlContent
-    })
+(function(){
+  // ---------- Contact form -> /api/contact (Cloudflare Worker -> email) ----------
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+  const statusEl = document.getElementById('contactStatus');
+  const submitBtn = document.getElementById('contactSubmit');
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById('name').value,
+      org: document.getElementById('org').value,
+      email: document.getElementById('email').value,
+      dataType: document.getElementById('dataType').value,
+      material: document.getElementById('material').value,
+      question: document.getElementById('question').value,
+      deadline: document.getElementById('deadline').value,
+      consent: document.getElementById('consent').checked ? 'Yes — agreed to processing of the enquiry (privacy policy)' : '',
+      website: document.getElementById('website').value
+    };
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    statusEl.textContent = '';
+    statusEl.className = 'form-status';
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if (result.ok) {
+        form.reset();
+        statusEl.textContent = 'Thank you — your enquiry has been sent. We will reply by email as soon as we can.';
+        statusEl.classList.add('success');
+      } else {
+        statusEl.textContent = result.error || 'Something went wrong. Please email us directly at info@analisa-data.com.';
+        statusEl.classList.add('error');
+      }
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server. Please email us directly at info@analisa-data.com.';
+      statusEl.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send enquiry';
+    }
   });
-
-  if (!brevoResp.ok) {
-    const errText = await brevoResp.text();
-    return new Response(JSON.stringify({ ok: false, error: 'Could not send the message. Please try again or email us directly.' , detail: errText }), {
-      status: 502,
-      headers: { 'content-type': 'application/json' }
-    });
-  }
-
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-    headers: { 'content-type': 'application/json' }
-  });
-}
+})();

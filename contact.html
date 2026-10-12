@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#1A1B1D">
+<script>
+/* applies the saved theme before the page paints, so there is no flash. Dark is the default. */
+(function(){var r=document.documentElement;r.classList.add('js');var t='dark';try{var s=localStorage.getItem('theme');if(s==='light'||s==='dark'){t=s;}}catch(e){}r.setAttribute('data-theme',t);})();
+</script>
+<title>Contact — Request a diffraction or PDF analysis | Analisa.D</title>
+<link rel="canonical" href="https://analisa-data.com/contact">
+<meta name="description" content="Request an analysis: describe your material, data and scientific question. We review your enquiry, propose a plan, timeline and quotation, and start once you approve the scope.">
+<link rel="preload" href="fonts/inter-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fraunces-v38-latin-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="extras.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-lockup"><svg class="peak-mark" viewBox="0 0 30 26" aria-hidden="true"><path d="M2,24 C8,24 12,5 15,2 C18,5 22,24 28,24" fill="none" stroke="var(--accent)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">nalisa</span><span class="logo-suffix">.D</span></span><span class="sub">// structural analysis for complex materials</span></a>
+    <nav class="links" id="siteNav" aria-label="Main"><a href="services.html">Services</a><a href="data-rescue.html">Data Rescue</a><a href="applications.html">Applications</a><a href="methodology.html">Methodology</a><a href="about.html">About</a><a href="contact.html" aria-current="page">Contact</a></nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch to light theme">
+        <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.4 5.4l1.7 1.7M16.9 16.9l1.7 1.7M5.4 18.6l1.7-1.7M16.9 7.1l1.7-1.7"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14.3A8.6 8.6 0 0 1 9.7 3.6a8.6 8.6 0 1 0 10.7 10.7z"/></svg>
+      </button>
+      <a class="btn primary" href="contact.html">Request an analysis</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">
+        <svg class="ico-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="ico-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html">Home</a> / Contact</p>
+      <h1>Request an analysis</h1>
+      <p class="lede">We are happy to discuss your dataset and possible analysis routes. There is no obligation at the enquiry stage.</p>
+      
+    </div>
+  </section>  <section id="contact" style="padding-top:0;border-top:none;">
+    <div class="wrap">
+      <div class="contact-grid reveal">
+        <div class="contact-info">
+          <p class="eyebrow">What happens next</p>
+          <div class="stages" style="margin-bottom:28px;">
+            <div class="stage"><div class="stage-num">01</div><div><h3>Review</h3><p>We read your description and any example data.</p></div></div>
+            <div class="stage"><div class="stage-num">02</div><div><h3>Suitability</h3><p>We confirm whether the data suit the intended analysis.</p></div></div>
+            <div class="stage"><div class="stage-num">03</div><div><h3>Proposal</h3><p>We propose an initial analysis plan, timeline and quotation.</p></div></div>
+            <div class="stage"><div class="stage-num">04</div><div><h3>Project</h3><p>We start once you approve the scope.</p></div></div>
+          </div>
+          <p>We usually reply within a few working days. If the data are not suitable for the intended analysis, we will explain why and suggest alternatives.</p>
+          <p>Prefer email directly?<br><a class="email" href="mailto:info@analisa-data.com">info@analisa-data.com</a></p>
+          <p class="sec-note">We treat your data confidentially and use it only to respond to your enquiry and, if you agree, to plan a project. See our <a href="datenschutz.html">privacy policy</a>.</p>
+        </div>
+        <form id="contactForm">
+          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" placeholder="Your full name" required autocomplete="name"></div>
+          <div class="field"><label for="org">Organisation / company</label><input id="org" name="org" type="text" placeholder="University, institute or company" autocomplete="organization"></div>
+          <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" placeholder="name@example.org" required autocomplete="email"></div>
+          <div class="field"><label for="material">Material or system</label><input id="material" name="material" type="text" placeholder="e.g. doped perovskite oxide, nanocrystalline battery material"></div>
+          <div class="field"><label for="dataType">Data type</label><select id="dataType" name="dataType"><option>Laboratory PXRD</option><option>Synchrotron PXRD</option><option>Neutron powder diffraction</option><option>Total scattering (X-ray)</option><option>Total scattering (neutron)</option><option>PDF data already generated</option><option>Project / proposal support (no dataset yet)</option><option>Other</option></select></div>
+          <div class="field"><label for="question">Scientific question</label><textarea id="question" name="question" required placeholder="Briefly describe what you want to learn from the data: phase composition, local structure, disorder, etc."></textarea></div>
+          <div class="field"><label for="deadline">Desired timeline</label><input id="deadline" name="deadline" type="text" placeholder="e.g. within 2 weeks, flexible, tied to a proposal deadline"></div>
+          <p class="form-note">Please do not attach data here. If useful, we will send you a secure link for sharing example data after your enquiry.</p>
+          <div class="field consent"><input id="consent" name="consent" type="checkbox" required><label for="consent">I agree that my data and message will be processed in order to respond to my enquiry. For more information, see the <a href="datenschutz.html">privacy policy</a>.</label></div>
+          <div class="hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <p class="form-status" id="contactStatus" role="status" aria-live="polite"></p>
+          <button class="btn primary" type="submit" id="contactSubmit" style="justify-self:start;">Send enquiry</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="wrap">
+      <div class="head reveal"><p class="eyebrow">FAQ</p><h2>Common questions</h2></div>
+      <div class="faq reveal" style="max-width:760px;">
+        <details><summary>Do I have to commit to anything when I enquire?</summary><p>No. The enquiry stage is without obligation; we only start a project once you approve the scope.</p></details>
+        <details><summary>Can you work with data I have not fully reduced?</summary><p>Yes — raw or reduced data are both fine. Tell us what you have and we will say what is feasible.</p></details>
+        <details><summary>Is my data kept confidential?</summary><p>Yes. Data are used only for the agreed project, and NDAs are available on request.</p></details>
+        <details><summary>I have no data yet — can you still help?</summary><p>Yes. We support grant and beamtime proposals and instrument selection. Choose “Project / proposal support” as data type.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand"><b>Analisa.D</b><p>Expert diffraction and PDF analysis for complex materials. Analysis and consulting services — not software.</p></div>
+      <div class="foot-col"><h4>Services</h4><a href="services.html">Services</a><a href="data-rescue.html">Data Rescue</a><a href="applications.html">Applications</a><a href="methodology.html">Methodology</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="about.html">About</a><a href="science.html">The science</a><a href="contact.html">Contact</a><a href="mailto:info@analisa-data.com">info@analisa-data.com</a></div>
+      <div class="foot-col"><h4>Legal</h4><a href="impressum.html">Impressum</a><a href="datenschutz.html">Privacy policy</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Analisa.D</span><span>Confidential handling of data · NDAs on request</span></div>
+  </div>
+</footer>
+<script src="site.js" defer></script>
+<script src="contact.js" defer></script>
+</body>
+</html>
